@@ -14,11 +14,11 @@
         }
     },
     "require": {
-        "php": ">=5.5",
+        "php": "^5.5 || ^7.0",
         "zendframework/zend-log": "2.5.*",
-        "zendframework/zend-modulemanager": "*",
-        "zendframework/zend-servicemanager": "2.5.*",
-        "zendframework/zend-mvc": "*"
+        "zendframework/zend-modulemanager": "^2.3 || ^3.0",
+        "zendframework/zend-servicemanager": "^2.3 || ^3.0",
+        "zendframework/zend-mvc": "^2.3 || ^3.0"
     },
     "require-dev": {
         "polderknowledge/build-tools": "dev-master@dev",
