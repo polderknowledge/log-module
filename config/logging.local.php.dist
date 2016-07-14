@@ -1,0 +1,56 @@
+<?php
+
+return [
+    'audit_logger' => [
+        'writers' => [
+            'dailystream' => [
+                'options' => [
+                    'filters' => [
+                        'suppress' => [
+                            'options' => [
+                                'suppress' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'error_logger' => [
+        'writers' => [
+            'auditlog' => [
+                'options' => [
+                    'filters' => [
+                        'suppress' => [
+                            'options' => [
+                                'suppress' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'dailystream' => [
+                'options' => [
+                    'filters' => [
+                        'suppress' => [
+                            'options' => [
+                                'suppress' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'errormail' => [
+                'options' => [
+                    'filters' => [
+                        'suppress' => [
+                            'options' => [
+                                'suppress' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

@@ -1,0 +1,34 @@
+{
+    "name": "polderknowledge/log-module",
+    "description": "A Zend Framework module that enables logging for an application.",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "PolderKnowledge\\LogModule\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PolderKnowledge\\LogModuleTest\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.5",
+        "zendframework/zend-log": "2.5.*",
+        "zendframework/zend-modulemanager": "*",
+        "zendframework/zend-servicemanager": "2.5.*",
+        "zendframework/zend-mvc": "*"
+    },
+    "require-dev": {
+        "polderknowledge/build-tools": "dev-master@dev",
+        "phpunit/phpunit": "^4.7",
+        "zendframework/zend-view": "^2.8"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://developers.polderknowledge.nl/packages"
+        }
+    ]
+}

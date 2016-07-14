@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'error_logger' => [
+        'writers' => [
+            'errormail' => [
+                'options' => [
+                    'subject_prepend_text' => sprintf('Error report for My Application'),
+                    'recipient' => 'support@polderknowledge.nl',
+                    'filters' => [
+                        'suppress' => [
+                            'options' => [
+                                'suppress' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
