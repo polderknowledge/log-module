@@ -12,14 +12,8 @@ namespace PolderKnowledgeTest\Log\Processor;
 use PHPUnit_Framework_TestCase;
 use PolderKnowledge\LogModule\Processor\ServerParamsProcessor;
 
-/**
- * Description of ServerParamsProcessorTest
- *
- * @author verweel
- */
 class ServerParamsProcessorTest extends PHPUnit_Framework_TestCase
 {
-
     protected $processor;
 
     protected $event = array();
