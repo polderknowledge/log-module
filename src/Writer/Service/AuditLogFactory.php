@@ -41,9 +41,6 @@ class AuditLogFactory implements FactoryInterface
 
         $auditLogger = $loggerServiceManager->get('AuditLog', ['config_key' => 'audit_logger']);
 
-        var_dump($auditLogger);
-        exit;
-
         $options = array_merge($this->createOptions, [
             'auditLogger' => $auditLogger,
         ]);
