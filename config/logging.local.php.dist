@@ -1,21 +1,6 @@
 <?php
 
 return [
-    'audit_logger' => [
-        'writers' => [
-            'dailystream' => [
-                'options' => [
-                    'filters' => [
-                        'suppress' => [
-                            'options' => [
-                                'suppress' => true,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
     'error_logger' => [
         'writers' => [
             'auditlog' => [

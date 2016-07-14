@@ -62,6 +62,48 @@ return [
         'errorhandler' => true,
         'fatal_error_shutdownfunction' => true,
         'writers' => [
+            'auditlog' => [
+                'name' => 'auditlog',
+                'options' => [
+                    'auditLogPath' => getcwd() . '/data/logs',
+                    'filters' => [
+                        'suppress' => [
+                            'name' => 'suppressfilter',
+                            'options' => [
+                                'suppress' => false,
+                            ],
+                        ],
+                        'priority' => [
+                            'name' => 'priority',
+                            'options' => [
+                                'priority' => \Zend\Log\Logger::WARN,
+                                'operator' => '<=',
+                            ],
+                        ],
+                    ],
+                    'formatter' => [
+                        'name' => 'dailystream'
+                    ],
+                ],
+            ],
+            'dailystream' => [
+                'name' => 'dailystream',
+                'options' => [
+                    'stream' => getcwd() . '/data/logs/php_log',
+                    'filters' => [
+                        'suppress' => [
+                            'name' => 'suppressfilter',
+                            'options' => [
+                                'suppress' => false,
+                            ],
+                        ],
+                    ],
+                    'formatter' => [
+                        'name' => 'dailystream'
+                    ],
+                    'log_separator' => PHP_EOL . str_pad('', 100, '-') . PHP_EOL . PHP_EOL,
+                ],
+            ],
             'errormail' => [
                 'name' => 'errorMail',
                 'options' => [
@@ -88,48 +130,6 @@ return [
                                 'interval' => 60 * 10, // Only mail once in 10 minutes
                             ],
                         ],
-                    ],
-                ],
-            ],
-            'dailystream' => [
-                'name' => 'dailystream',
-                'options' => [
-                    'stream' => getcwd() . '/data/logs/php_log',
-                    'filters' => [
-                        'suppress' => [
-                            'name' => 'suppressfilter',
-                            'options' => [
-                                'suppress' => false,
-                            ],
-                        ],
-                    ],
-                    'formatter' => [
-                        'name' => 'dailystream'
-                    ],
-                    'log_separator' => PHP_EOL . str_pad('', 100, '-') . PHP_EOL . PHP_EOL,
-                ],
-            ],
-            'auditlog' => [
-                'name' => 'auditlog',
-                'options' => [
-                    'auditLogPath' => getcwd() . '/data/logs',
-                    'filters' => [
-                        'suppress' => [
-                            'name' => 'suppressfilter',
-                            'options' => [
-                                'suppress' => false,
-                            ],
-                        ],
-                        'priority' => [
-                            'name' => 'priority',
-                            'options' => [
-                                'priority' => \Zend\Log\Logger::WARN,
-                                'operator' => '<=',
-                            ],
-                        ],
-                    ],
-                    'formatter' => [
-                        'name' => 'dailystream'
                     ],
                 ],
             ],
