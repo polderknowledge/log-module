@@ -48,3 +48,11 @@ simply writes information to the output stream.
 ## Disabling Loggers
 
 Copy `config/logging.local.php.dist` to your application's `config/autoload/` directory.
+
+## Exception Logging
+
+This module implements a view helper and a controller plugin which can be used to log exceptions
+manually. Simply call `$this->logException($exception);` from the view or the controller.
+
+The view helper and controller plugin both make use of the `ExceptionLogger` task service which can
+be retrieved from the service manager: `$serviceLocator->get(\PolderKnowledge\LogModule\TaskService\ExceptionLogger::class);`

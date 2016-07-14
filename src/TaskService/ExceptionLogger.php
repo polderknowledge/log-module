@@ -28,20 +28,19 @@ final class ExceptionLogger
     }
 
     /**
-     * @param Exception $e
+     * @param Exception $exception
      */
-    public function logException(Exception $e)
+    public function logException(Exception $exception)
     {
-        $trace = $e->getTraceAsString();
+        while ($exception) {
+            $this->logger->err($exception->getMessage(), [
+                $exception->getCode(),
+                $exception->getFile(),
+                $exception->getLine(),
+                $exception->getTrace()
+            ]);
 
-        $i = 1;
-        do {
-            $messages[] = sprintf('%d: %s -> %s', $i++, get_class($e), $e->getMessage());
-        } while ($e = $e->getPrevious());
-
-        $log = "Exception:\n" . implode("\n", $messages) . "\n";
-        $log .= "Trace:\n" . $trace;
-
-        $this->logger->err($log);
+            $exception = $exception->getPrevious();
+        }
     }
 }

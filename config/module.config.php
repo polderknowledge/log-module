@@ -39,6 +39,11 @@ return [
             ],
         ],
     ],
+    'controller_plugins' => [
+        'factories' => [
+            'logException' => Mvc\Controller\Plugin\Service\LogExceptionFactory::class,
+        ],
+    ],
     'command_logger' => [
         'writers' => [
             'outputstream' => [
@@ -188,6 +193,7 @@ return [
         ],
         'factories' => [
             Listener\MvcEventError::class => Listener\Service\MvcEventErrorFactory::class,
+            TaskService\ExceptionLogger::class => TaskService\Service\ExceptionLoggerFactory::class,
         ],
         'invokables' => [
             Service\LoggerServiceManager::class => Service\LoggerServiceManager::class,
@@ -195,6 +201,11 @@ return [
             \Zend\Log\Writer\FilterPluginManager::class => \Zend\Log\Writer\FilterPluginManager::class,
             \Zend\Log\Writer\FormatterPluginManager::class => \Zend\Log\Writer\FormatterPluginManager::class,
             \Zend\Log\ProcessorPluginManager::class => \Zend\Log\ProcessorPluginManager::class,
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            'logException' => View\Helper\Service\LogExceptionFactory::class,
         ],
     ],
 ];
