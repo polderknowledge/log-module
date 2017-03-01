@@ -12,6 +12,8 @@ php55:
 php70:
   image: docker.polderknowledge.nl/ci/php:7.0
   script:
+    - composer install
+    - composer install
     - phing
   stage: test
   tags:
