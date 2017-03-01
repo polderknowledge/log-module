@@ -1,0 +1,27 @@
+stages:
+  - test
+php55:
+  image: docker.polderknowledge.nl/ci/php:5.5
+  script:
+    - composer install
+    - phing
+  stage: test
+  tags:
+    - php
+
+php70:
+  image: docker.polderknowledge.nl/ci/php:7.0
+  script:
+    - phing
+  stage: test
+  tags:
+    - php
+
+php70-update:
+  image: docker.polderknowledge.nl/ci/php:7.0
+  script:
+    - composer update
+    - phing
+  stage: test
+  tags:
+    - php
