@@ -9,44 +9,53 @@
 
 namespace PolderKnowledge\LogModule\Writer\Service;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use PolderKnowledge\LogModule\Writer\AuditLog;
 use Zend\Log\Exception\RuntimeException;
+use Zend\Log\Writer\Mail;
 use Zend\Mail\Message;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ErrorMailFactory implements FactoryInterface
 {
     /**
-     * @var array
-     */
-    protected $createOptions = array();
-
-    /**
-     * @param array $createOptions
-     */
-    public function __construct(array $createOptions = array())
-    {
-        $this->createOptions = $createOptions;
-    }
-
-    /**
      * @param ServiceLocatorInterface $serviceLocator
      * @return AuditLog
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        if (!isset($this->createOptions['recipient'])) {
+        return $this($serviceLocator, Mail::class);
+    }
+
+    /**
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        if (!isset($options['recipient'])) {
             throw new RuntimeException('No recipient configured');
         }
 
         $mail = new Message();
-        $mail->setTo($this->createOptions['recipient']);
+        $mail->setTo($options['recipient']);
 
-        $options = array_merge($this->createOptions, [
+        $options = array_merge($options, [
             'mail' => $mail,
         ]);
 
-        return $serviceLocator->get('mail', $options);
+        return $container->get('mail', $options);
     }
 }

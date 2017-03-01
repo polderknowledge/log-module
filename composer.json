@@ -21,9 +21,9 @@
         "zendframework/zend-mvc": "^2.3 || ^3.0"
     },
     "require-dev": {
-        "polderknowledge/build-tools": "dev-master@dev",
         "phpunit/phpunit": "^4.7",
-        "zendframework/zend-view": "^2.8"
+        "zendframework/zend-view": "^2.8",
+        "polderknowledge/build-tools": "^2.0"
     },
     "repositories": [
         {

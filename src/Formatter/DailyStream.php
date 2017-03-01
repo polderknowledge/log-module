@@ -15,12 +15,12 @@ use Zend\Log\Formatter\FormatterInterface;
 
 class DailyStream implements FormatterInterface
 {
-     protected $dateTimeFormat = self::DEFAULT_DATETIME_FORMAT;
+    protected $dateTimeFormat = self::DEFAULT_DATETIME_FORMAT;
 
     /**
      * Formats data into a single line to be written by the writer.
      *
-     * @param  array  $event event data
+     * @param  array $event event data
      * @return string formatted line to write to the log
      */
     public function format($event)
@@ -34,8 +34,8 @@ class DailyStream implements FormatterInterface
         }
 
         $output = $timestamp . ' ' . $event['priorityName'] . ' ('
-                . $event['priority'] . ') ' . $event['message'] .' in '
-                . $event['extra']['file'] . ' on line ' . $event['extra']['line'];
+            . $event['priority'] . ') ' . $event['message'] . ' in '
+            . $event['extra']['file'] . ' on line ' . $event['extra']['line'];
 
         $debugtrace = null;
         $context = array();
@@ -99,8 +99,8 @@ class DailyStream implements FormatterInterface
                             break;
                     }
                 }
-                $outputTrace .= "\n";
 
+                $outputTrace .= "\n";
             }
             $output .= "\n[Trace]\n" . $outputTrace;
         }

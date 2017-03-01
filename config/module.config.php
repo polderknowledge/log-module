@@ -9,6 +9,7 @@
 
 namespace PolderKnowledge\LogModule;
 
+use PolderKnowledge\LogModule\Service\LoggerServiceManagerFactory;
 use Zend\Log\LoggerAbstractServiceFactory;
 
 return [
@@ -194,9 +195,9 @@ return [
         'factories' => [
             Listener\MvcEventError::class => Listener\Service\MvcEventErrorFactory::class,
             TaskService\ExceptionLogger::class => TaskService\Service\ExceptionLoggerFactory::class,
+            Service\LoggerServiceManager::class => LoggerServiceManagerFactory::class,
         ],
         'invokables' => [
-            Service\LoggerServiceManager::class => Service\LoggerServiceManager::class,
             \Zend\Log\WriterPluginManager::class => \Zend\Log\WriterPluginManager::class,
             \Zend\Log\Writer\FilterPluginManager::class => \Zend\Log\Writer\FilterPluginManager::class,
             \Zend\Log\Writer\FormatterPluginManager::class => \Zend\Log\Writer\FormatterPluginManager::class,

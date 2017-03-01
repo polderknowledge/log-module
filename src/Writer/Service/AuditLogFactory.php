@@ -9,39 +9,45 @@
 
 namespace PolderKnowledge\LogModule\Writer\Service;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use PolderKnowledge\LogModule\Service\LoggerServiceManager;
 use PolderKnowledge\LogModule\Writer\AuditLog;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class AuditLogFactory implements FactoryInterface
 {
     /**
-     * @var array
-     */
-    protected $createOptions = array();
-
-    /**
-     * @param array $createOptions
-     */
-    public function __construct(array $createOptions = array())
-    {
-        $this->createOptions = $createOptions;
-    }
-
-    /**
      * @param ServiceLocatorInterface $serviceLocator
      * @return AuditLog
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $parentLocator = $serviceLocator->getServiceLocator();
+        return $this($serviceLocator->getServiceLocator(), AuditLog::class);
+    }
 
-        $loggerServiceManager = $parentLocator->get(LoggerServiceManager::class);
+    /**
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $loggerServiceManager = $container->get(LoggerServiceManager::class);
 
         $auditLogger = $loggerServiceManager->get('AuditLog', ['config_key' => 'audit_logger']);
 
-        $options = array_merge($this->createOptions, [
+        $options = array_merge($options, [
             'auditLogger' => $auditLogger,
         ]);
 
