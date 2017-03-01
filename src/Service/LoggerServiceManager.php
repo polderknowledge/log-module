@@ -8,6 +8,12 @@ use Zend\ServiceManager\AbstractPluginManager;
 
 class LoggerServiceManager extends AbstractPluginManager
 {
+    public function __construct($configInstanceOrParentLocator = null, array $config = [])
+    {
+        $this->instanceOf = LoggerInterface::class;
+        parent::__construct($configInstanceOrParentLocator, $config);
+    }
+
     public function validatePlugin($plugin)
     {
         if ($plugin instanceof LoggerInterface) {

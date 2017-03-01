@@ -2,15 +2,18 @@
 
 namespace PolderKnowledge\LogModule\Service;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Zend\Log as ZendLog;
 use Zend\Log\Exception\InvalidArgumentException;
 use Zend\Log\Formatter\FormatterInterface;
 use Zend\Log\Logger;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\MutableCreationOptionsInterface;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsInterface
+class LoggerServiceFactory implements FactoryInterface
 {
 
     /**
@@ -40,27 +43,31 @@ class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsIn
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * Create an object
      *
-     * @return Logger
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        if (method_exists($serviceLocator, 'getServiceLocator')) {
-            $serviceLocator = $serviceLocator->getServiceLocator();
-        }
-        $config = $serviceLocator->get('Config');
+        $config = $container->get('config');
         $options = (isset($config[$this->configKey])) ? $config[$this->configKey] : array();
         $writers = array();
         $processors = array();
 
         if (isset($options['writers'])) {
-            $writers = $this->createWriters($serviceLocator, $options['writers']);
+            $writers = $this->createWriters($container, $options['writers']);
             unset($options['writers']);
         }
 
         if (isset($options['processors'])) {
-            $processors = $this->createProcessors($serviceLocator, $options['processors']);
+            $processors = $this->createProcessors($container, $options['processors']);
             unset($options['processors']);
         }
 
@@ -81,14 +88,28 @@ class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsIn
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return Logger
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        if (method_exists($serviceLocator, 'getServiceLocator')) {
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
+
+        return $this($serviceLocator, ZendLog\Logger::class);
+    }
+
+    /**
+     * @param ServiceLocatorInterface $container
      * @param array                                        $writers
      *
      * @return array
      * @throws InvalidArgumentException
      */
-    protected function createWriters(ServiceLocatorInterface $serviceLocator, array $writers)
+    protected function createWriters(ContainerInterface $container, array $writers)
     {
-        $writerPluginManager = $serviceLocator->get('Zend\Log\WriterPluginManager');
+        $writerPluginManager = $container->get('Zend\Log\WriterPluginManager');
 
         $createdWriters = array();
 
@@ -103,12 +124,12 @@ class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsIn
             $formatter = null;
 
             if (isset($writerOptions['formatter'])) {
-                $formatter = $this->createFormatter($serviceLocator, $writerOptions['formatter']);
+                $formatter = $this->createFormatter($container, $writerOptions['formatter']);
                 unset($writerOptions['formatter']);
             }
 
             if (isset($writerOptions['filters'])) {
-                $filters = $this->createFilters($serviceLocator, $writerOptions['filters']);
+                $filters = $this->createFilters($container, $writerOptions['filters']);
                 unset($writerOptions['filters']);
             }
 
@@ -129,15 +150,15 @@ class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsIn
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $container
      * @param array $processors
      *
      * @return array
      * @throws InvalidArgumentException
      */
-    protected function createProcessors(ServiceLocatorInterface $serviceLocator, array $processors)
+    protected function createProcessors(ContainerInterface $container, array $processors)
     {
-        $writerPluginManager = $serviceLocator->get('Zend\Log\ProcessorPluginManager');
+        $writerPluginManager = $container->get('Zend\Log\ProcessorPluginManager');
 
         $createdProcessors = array();
 
@@ -156,15 +177,15 @@ class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsIn
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $container
      * @param array                                        $filters
      *
      * @return array
      * @throws InvalidArgumentException
      */
-    protected function createFilters(ServiceLocatorInterface $serviceLocator, array $filters)
+    protected function createFilters(ContainerInterface $container, array $filters)
     {
-        $filterPluginManager = $serviceLocator->get('Zend\Log\Writer\FilterPluginManager');
+        $filterPluginManager = $container->get('Zend\Log\Writer\FilterPluginManager');
 
         $createdFilters = array();
 
@@ -183,15 +204,15 @@ class LoggerServiceFactory implements FactoryInterface, MutableCreationOptionsIn
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $container
      * @param array                                        $formatter
      *
      * @return FormatterInterface
      * @throws InvalidArgumentException
      */
-    protected function createFormatter(ServiceLocatorInterface $serviceLocator, array $formatter)
+    protected function createFormatter(ContainerInterface $container, array $formatter)
     {
-        $formatterPluginManager = $serviceLocator->get('Zend\Log\Writer\FormatterPluginManager');
+        $formatterPluginManager = $container->get('Zend\Log\Writer\FormatterPluginManager');
 
         if (!isset($formatter['name'])) {
             throw new ZendLog\Exception\InvalidArgumentException('Options must contain a name for the formatter');
