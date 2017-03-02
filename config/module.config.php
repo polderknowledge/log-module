@@ -110,35 +110,6 @@ return [
                     'log_separator' => PHP_EOL . str_pad('', 100, '-') . PHP_EOL . PHP_EOL,
                 ],
             ],
-            'errormail' => [
-                'name' => 'errorMail',
-                'options' => [
-                    'subject_prepend_text' => sprintf('Error report for My Application'),
-                    'recipient' => 'support@polderknowledge.nl',
-                    'filters' => [
-                        'suppress' => [
-                            'name' => 'suppressfilter',
-                            'options' => [
-                                'suppress' => true,
-                            ],
-                        ],
-                        'priority' => [
-                            'name' => 'priority',
-                            'options' => [
-                                'priority' => \Zend\Log\Logger::WARN,
-                                'operator' => '<=',
-                            ],
-                        ],
-                        'interval' => [
-                            'name' => Filter\Interval::class,
-                            'options' => [
-                                'lockFile' => getcwd() . '/data/tmp/errormail.lock',
-                                'interval' => 60 * 10, // Only mail once in 10 minutes
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ],
         'processors' => [
             ['name' => 'backtrace'],
@@ -196,9 +167,9 @@ return [
             Listener\MvcEventError::class => Listener\Service\MvcEventErrorFactory::class,
             TaskService\ExceptionLogger::class => TaskService\Service\ExceptionLoggerFactory::class,
             Service\LoggerServiceManager::class => LoggerServiceManagerFactory::class,
+            \Zend\Log\WriterPluginManager::class => \Zend\Log\WriterPluginManagerFactory::class,
         ],
         'invokables' => [
-            \Zend\Log\WriterPluginManager::class => \Zend\Log\WriterPluginManager::class,
             \Zend\Log\Writer\FilterPluginManager::class => \Zend\Log\Writer\FilterPluginManager::class,
             \Zend\Log\Writer\FormatterPluginManager::class => \Zend\Log\Writer\FormatterPluginManager::class,
             \Zend\Log\ProcessorPluginManager::class => \Zend\Log\ProcessorPluginManager::class,
