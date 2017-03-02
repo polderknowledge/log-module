@@ -57,9 +57,12 @@ class LoggerServiceFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
-        $options = (isset($config[$this->configKey])) ? $config[$this->configKey] : array();
+        $configKey = isset($options['config_key']) ? $options['config_key'] : $this->configKey;
+        $options = (isset($config[$configKey])) ? $config[$configKey] : array();
         $writers = array();
         $processors = array();
+
+
 
         if (isset($options['writers'])) {
             $writers = $this->createWriters($container, $options['writers']);
