@@ -56,3 +56,19 @@ manually. Simply call `$this->logException($exception);` from the view or the co
 
 The view helper and controller plugin both make use of the `ExceptionLogger` task service which can
 be retrieved from the service manager: `$serviceLocator->get(\PolderKnowledge\LogModule\TaskService\ExceptionLogger::class);`
+
+## How to inject a logger in your class
+
+example:
+
+```php
+final class MyControllerFactory implements FactoryInterface
+{
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return new MyController(
+            $container->get(LoggerServiceManager::class)->get('CommandLog')
+        );
+    }
+}
+```
