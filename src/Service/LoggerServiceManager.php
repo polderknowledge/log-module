@@ -14,9 +14,14 @@ class LoggerServiceManager extends AbstractPluginManager
         parent::__construct($configInstanceOrParentLocator, $config);
     }
 
+    public function validate($instance)
+    {
+        $this->validatePlugin($instance);
+    }
+
     public function validatePlugin($plugin)
     {
-        if ($plugin instanceof LoggerInterface) {
+        if ($plugin instanceof $this->instanceOf) {
             return;
         }
 

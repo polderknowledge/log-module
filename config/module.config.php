@@ -9,8 +9,10 @@
 
 namespace PolderKnowledge\LogModule;
 
+use PolderKnowledge\LogModule\Formatter\DailyStream;
 use PolderKnowledge\LogModule\Service\LoggerServiceManagerFactory;
 use Zend\Log\LoggerAbstractServiceFactory;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'audit_logger' => [
@@ -122,9 +124,12 @@ return [
         ],
     ],
     'log_formatter_plugin' => [
-        'invokables' => [
+        'aliases' => [
             'dailystream' => Formatter\DailyStream::class,
         ],
+        'factories' => [
+            Formatter\DailyStream::class => InvokableFactory::class,
+        ]
     ],
     'log_processor_plugin' => [
         'invokables' => [
@@ -144,8 +149,11 @@ return [
         'factories' => [
             'auditlog' => Writer\Service\AuditLogFactory::class,
             'errorMail' => Writer\Service\ErrorMailFactory::class,
+            Writer\DailyStream::class => InvokableFactory::class,
+            \Zend\Log\Writer\Stream::class => InvokableFactory::class,
+            Writer\RequestIdStream::class => InvokableFactory::class,
         ],
-        'invokables' => [
+        'aliases' => [
             'dailystream' => Writer\DailyStream::class,
             'outputstream' => \Zend\Log\Writer\Stream::class,
             'requestidstream' => Writer\RequestIdStream::class,
@@ -168,11 +176,9 @@ return [
             TaskService\ExceptionLogger::class => TaskService\Service\ExceptionLoggerFactory::class,
             Service\LoggerServiceManager::class => LoggerServiceManagerFactory::class,
             \Zend\Log\WriterPluginManager::class => \Zend\Log\WriterPluginManagerFactory::class,
-        ],
-        'invokables' => [
-            \Zend\Log\Writer\FilterPluginManager::class => \Zend\Log\Writer\FilterPluginManager::class,
-            \Zend\Log\Writer\FormatterPluginManager::class => \Zend\Log\Writer\FormatterPluginManager::class,
-            \Zend\Log\ProcessorPluginManager::class => \Zend\Log\ProcessorPluginManager::class,
+            \Zend\Log\FilterPluginManager::class => \Zend\Log\FilterPluginManagerFactory::class,
+            \Zend\Log\FormatterPluginManager::class => \Zend\Log\FormatterPluginManagerFactory::class,
+            \Zend\Log\ProcessorPluginManager::class => \Zend\Log\ProcessorPluginManagerFactory::class,
         ],
     ],
     'view_helpers' => [

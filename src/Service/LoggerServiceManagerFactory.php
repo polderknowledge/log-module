@@ -20,7 +20,7 @@ class LoggerServiceManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator);
+        return $this($serviceLocator, LoggerServiceManager::class);
     }
 
     /**
