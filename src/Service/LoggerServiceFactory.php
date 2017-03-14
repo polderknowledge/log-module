@@ -188,7 +188,7 @@ class LoggerServiceFactory implements FactoryInterface
      */
     protected function createFilters(ContainerInterface $container, array $filters)
     {
-        $filterPluginManager = $container->get('Zend\Log\Writer\FilterPluginManager');
+        $filterPluginManager = $container->get(\Zend\Log\FilterPluginManager::class);
 
         $createdFilters = array();
 
@@ -215,7 +215,7 @@ class LoggerServiceFactory implements FactoryInterface
      */
     protected function createFormatter(ContainerInterface $container, array $formatter)
     {
-        $formatterPluginManager = $container->get('Zend\Log\Writer\FormatterPluginManager');
+        $formatterPluginManager = $container->get(\Zend\Log\FormatterPluginManager::class);
 
         if (!isset($formatter['name'])) {
             throw new ZendLog\Exception\InvalidArgumentException('Options must contain a name for the formatter');
