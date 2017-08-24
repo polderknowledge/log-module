@@ -10,7 +10,7 @@ use Zend\Log\Formatter\FormatterInterface;
 use Zend\Log\Logger;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class LoggerServiceFactory implements FactoryInterface

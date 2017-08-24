@@ -45,12 +45,17 @@ class AuditLogFactory implements FactoryInterface
     {
         $loggerServiceManager = $container->get(LoggerServiceManager::class);
 
+
         $auditLogger = $loggerServiceManager->get('AuditLog', ['config_key' => 'audit_logger']);
 
-        $options = array_merge($options, [
+        $loggerOptions = [
             'auditLogger' => $auditLogger,
-        ]);
+        ];
 
-        return new AuditLog($options);
+        if ($options !== null) {
+            $loggerOptions = array_merge($options, $loggerOptions);
+        }
+
+        return new AuditLog($loggerOptions);
     }
 }
