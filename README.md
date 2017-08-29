@@ -1,7 +1,7 @@
 # Log Module
 
-The log module is a Zend Framework module that enables error logging in an application.
-It provides a set of loggers that can be used throughout the application.
+The log module is a Zend Framework module that provides support for Monolog logger channels. This module also comes
+with a standard error logger enabled which is used to log PHP notices, warnings and errors. in an application.
 
 ## Installation
 
@@ -9,7 +9,7 @@ It provides a set of loggers that can be used throughout the application.
 composer require polderknowledge/log-module
 ```
 
-Next add the module to the application config:
+Next add the module to the module config (usually `config/modules.php` or `config/application.config.php`):
 
 ```php
 return [
@@ -22,40 +22,27 @@ return [
 Last but not least, copy over the dist configuration files located the `config/` directory to
 your application's autoload directory.
 
+## Concept of Logging
+
+Logs are written to channels. A logging channel is a 
+
 ## Loggers
 
-The module provides three preconfigured loggers. An *error logger*, an *audit logger* and
-a *command logger*.
+This module has a predefined `ErrorLogger` logging channel configured. This channel is used to write PHP notices, 
+warnings and errors to. Since it depends on the application on how to handle these messages, there are no handlers 
+defined for this channel.
 
-### Error Logger
+## MVC Error Logging
 
-The error logger will log PHP errors. In order to do this, there are a couple of writers
-pre-configured:
-* errormail: An e-mail will be sent once every 'n' minutes containing the errors.
-* dailystream: Logs errors to the `data/logs/php_log.yyyymmdd` file.
-* auditlog: Uses the *audit logger* to write logs.
+This module will catch all errors that are triggered in the `MvcEvent::DISPATCH_ERROR` and `MvcEvent::RENDER_ERROR` 
+events. These errors are written to the `ErrorLogger` channel.
 
-### Audit Logger
+It's also possible to manually log throwable objects. This module implements a view helper and a controller plugin 
+which can be used to log those throwable objects. Simply call `$this->logThrowable($exception);` from the view or the 
+controller.
 
-The audit logger logs each message to a separate file. In this file additional information about
-the current request is provided.
-
-## Command Logger
-
-The command logger can be used by job workers in order to write information about jobs. It
-simply writes information to the output stream.
-
-## Disabling Loggers
-
-Copy `config/logging.local.php.dist` to your application's `config/autoload/` directory.
-
-## Exception Logging
-
-This module implements a view helper and a controller plugin which can be used to log exceptions
-manually. Simply call `$this->logException($exception);` from the view or the controller.
-
-The view helper and controller plugin both make use of the `ExceptionLogger` task service which can
-be retrieved from the service manager: `$serviceLocator->get(\PolderKnowledge\LogModule\TaskService\ExceptionLogger::class);`
+The view helper and controller plugin both make use of the `ThrowableLogger` helper which can be retrieved from the 
+service manager: `$container->get(\PolderKnowledge\LogModule\TaskService\ExceptionLogger::class);`
 
 ## How to inject a logger in your class
 

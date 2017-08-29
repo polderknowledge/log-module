@@ -3,60 +3,76 @@
  * Polder Knowledge / LogModule (http://polderknowledge.nl)
  *
  * @link http://developers.polderknowledge.nl/gitlab/polderknowledge/log-module for the canonical source repository
- * @copyright Copyright (c) 2016 Polder Knowledge (http://www.polderknowledge.nl)
+ * @copyright Copyright (c) 2016-2017 Polder Knowledge (http://www.polderknowledge.nl)
  * @license http://polderknowledge.nl/license/proprietary proprietary
  */
 
 namespace PolderKnowledge\LogModule;
 
+use Monolog\ErrorHandler;
+use PolderKnowledge\LogModule\Helper\ZendLogUtils;
 use PolderKnowledge\LogModule\Listener\MvcEventError;
-use PolderKnowledge\LogModule\Service\LoggerServiceManager;
-use Zend\Log\FilterPluginManager;
-use Zend\Log\FormatterPluginManager;
-use Zend\Log\ProcessorPluginManager;
-use Zend\Log\WriterPluginManager;
+use PolderKnowledge\LogModule\Service\FormatterPluginManager;
+use PolderKnowledge\LogModule\Service\HandlerPluginManager;
+use PolderKnowledge\LogModule\Service\ProcessorPluginManager;
+use Psr\Container\ContainerInterface;
+use Zend\EventManager\EventInterface;
+use Zend\Log\Logger;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\Listener\ServiceListenerInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\Mvc\MvcEvent;
 
-class Module
+final class Module implements ConfigProviderInterface, BootstrapListenerInterface, InitProviderInterface
 {
+    /**
+     * Returns configuration to merge with application configuration
+     *
+     * @return array|\Traversable
+     */
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
     }
 
     /**
-     * @param ModuleManagerInterface $manager
+     * Listen to the bootstrap event
+     *
+     * @param EventInterface $event
+     * @return array
+     */
+    public function onBootstrap(EventInterface $event)
+    {
+        /** @var MvcEvent $mvcEvent */
+        $mvcEvent = $event;
+
+        $container = $mvcEvent->getApplication()->getServiceManager();
+        $mvcErrorLogger = $container->get(MvcEventError::class);
+        $phpErrorLogger = $container->get('ErrorLogger');
+
+        // @todo Remove this statement in the next major version. This is just here for backwards compatibility.
+        if ($phpErrorLogger instanceof Logger) {
+            $phpErrorLogger = ZendLogUtils::extractPsrLogger($phpErrorLogger);
+        }
+
+        ErrorHandler::register($phpErrorLogger);
+
+        $eventManager = $mvcEvent->getApplication()->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $mvcErrorLogger);
+        $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, $mvcErrorLogger);
+    }
+
+    /**
+     * Initialize workflow
+     *
+     * @param  ModuleManagerInterface $manager
+     * @return void
      */
     public function init(ModuleManagerInterface $manager)
     {
-        $sm = $manager->getEvent()->getParam('ServiceManager');
-
-        $serviceListener = $sm->get('ServiceListener');
-        $serviceListener->addServiceManager(LoggerServiceManager::class, 'logger_service', '', '');
-        $serviceListener->addServiceManager(WriterPluginManager::class, 'log_writer_plugin', '', '');
-        $serviceListener->addServiceManager(FilterPluginManager::class, 'log_filter_plugin', '', '');
-        $serviceListener->addServiceManager(FormatterPluginManager::class, 'log_formatter_plugin', '', '');
-        $serviceListener->addServiceManager(ProcessorPluginManager::class, 'log_processor_plugin', '', '');
-
-        $sharedManager = $manager->getEventManager()->getSharedManager();
-        $sharedManager->attach('Zend\Mvc\Application', MvcEvent::EVENT_BOOTSTRAP, function (MvcEvent $event) {
-            $application = $event->getApplication();
-            $serviceManager = $application->getServiceManager();
-            $loggerServiceManager = $serviceManager->get(LoggerServiceManager::class);
-            $loggerServiceManager->get('ErrorLog', array('config_key' => 'error_logger'));
-        }, PHP_INT_MAX);
-    }
-
-    public function onBootstrap(MvcEvent $event)
-    {
-        $application = $event->getApplication();
-        $eventManager = $application->getEventManager();
-        $serviceManager = $application->getServiceManager();
-
-        $callback = [$serviceManager->get(MvcEventError::class), 'onError'];
-
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback);
-        $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, $callback);
+        // Load WShafer's PSR11MonoLog module so we have access to all Monolog factories.
+        $manager->loadModule('WShafer\\PSR11MonoLog');
     }
 }

@@ -3,17 +3,19 @@
  * Polder Knowledge / LogModule (http://polderknowledge.nl)
  *
  * @link http://developers.polderknowledge.nl/gitlab/polderknowledge/log-module for the canonical source repository
- * @copyright Copyright (c) 2016 Polder Knowledge (http://www.polderknowledge.nl)
+ * @copyright Copyright (c) 2016-2017 Polder Knowledge (http://www.polderknowledge.nl)
  * @license http://polderknowledge.nl/license/proprietary proprietary
  */
 
 namespace PolderKnowledge\LogModule\Listener;
 
-use Zend\Log\LoggerAwareInterface;
-use Zend\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
-class MvcEventError implements LoggerAwareInterface
+/**
+ * This class acts as an event listener so that we can log errors that occur in zendframework/zend-mvc.
+ */
+final class MvcEventError
 {
     /**
      * @var LoggerInterface
@@ -25,21 +27,23 @@ class MvcEventError implements LoggerAwareInterface
      */
     public function __construct(LoggerInterface $logger)
     {
-        $this->setLogger($logger);
+        $this->logger = $logger;
     }
     
     /**
-     * @param MvcEvent $event
+     * Should be called when an MvcEvent is fired.
+     *
+     * @param MvcEvent $event The event that is fired.
+     * @return void
      */
-    public function onError(MvcEvent $event)
+    public function __invoke(MvcEvent $event)
     {
         if ($event->getError() !== 'error-exception') {
             return;
         }
 
         $exception = $event->getParam('exception');
-        $logger = $this->getLogger();
-        $logMessages = array();
+        $logMessages = [];
 
         do {
             $extra = array(
@@ -59,25 +63,7 @@ class MvcEventError implements LoggerAwareInterface
         } while ($exception);
 
         foreach (array_reverse($logMessages) as $logMessage) {
-            $logger->err($logMessage['message'], $logMessage['extra']);
+            $this->logger->error($logMessage['message'], $logMessage['extra']);
         }
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     * @return \PolderKnowledge\LogModule\Listener\MvcEventError
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        return $this;
-    }
-    
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
     }
 }
