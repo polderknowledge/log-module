@@ -1,28 +1,43 @@
 <?php
 /**
- * Polder Knowledge / LogModule (http://polderknowledge.nl)
+ * Polder Knowledge / log-module (https://polderknowledge.com)
  *
- * @link http://developers.polderknowledge.nl/gitlab/polderknowledge/log-module for the canonical source repository
- * @copyright Copyright (c) 2016-2017 Polder Knowledge (http://www.polderknowledge.nl)
- * @license http://polderknowledge.nl/license/proprietary proprietary
+ * @link https://github.com/polderknowledge/log-module for the canonical source repository
+ * @copyright Copyright (c) 2016-2017 Polder Knowledge (https://polderknowledge.com)
+ * @license https://github.com/polderknowledge/log-module/blob/master/LICENSE.md MIT
  */
 
 namespace PolderKnowledgeTest\Log\Listener;
 
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use PolderKnowledge\LogModule\Listener\MvcEventError;
-use Zend\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
-class MvcEventErrorTest extends PHPUnit_Framework_TestCase
+class MvcEventErrorTest extends TestCase
 {
+    private $loggerMock;
+    private $mvcEventError;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->mvcEventError = new MvcEventError($this->loggerMock);
+    }
+
     public function testLoggerIssetOnConstruct()
     {
-        $loggerMock = $this->getMock(LoggerInterface::class);
-        
-        $mvcEventError = new MvcEventError($loggerMock);
-        $this->assertSame($mvcEventError->getLogger(), $loggerMock);
+        // Arrange
+        // ...
+
+        // Act
+        $result = $this->mvcEventError->getLogger();
+
+        // Assert
+        static::assertSame($this->loggerMock, $result);
     }
     
     /**
@@ -30,18 +45,18 @@ class MvcEventErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testLoggerIsCalledWithExpectedParams($exception, $extra)
     {
-        $loggerMock = $this->getMock(LoggerInterface::class);
-        $loggerMock->expects($this->once())->method('err')->with('Exception', $extra);
-        $eventMock = $this->getMock(
-            MvcEvent::class,
-            array('getError', 'getParam')
-        );
-        
+        // Arrange
+        $this->loggerMock->expects($this->once())->method('error')->with('Exception', $extra);
+
+        $eventMock = $this->createMock(MvcEvent::class);
         $eventMock->expects($this->atLeastOnce())->method('getError')->willReturn('error-exception');
         $eventMock->expects($this->atLeastOnce())->method('getParam')->with('exception')->willReturn($exception);
-        
-        $mvcEventError = new MvcEventError($loggerMock);
-        $mvcEventError->onError($eventMock);
+
+        // Act
+        $this->mvcEventError->__invoke($eventMock);
+
+        // Assert
+        // ...
     }
     
     public function expectedParamsProvider()
@@ -50,51 +65,55 @@ class MvcEventErrorTest extends PHPUnit_Framework_TestCase
         $exceptionWithXDebug = new Exception('Exception');
         $exceptionWithXDebug->xdebug_message = 'xdebug_message';
         
-        $extra = array(
+        $extra = [
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
             'trace' => $exception->getTrace(),
-        );
+        ];
         
-        $extraWithXDebug = array(
+        $extraWithXDebug = [
             'file' => $exceptionWithXDebug->getFile(),
             'line' => $exceptionWithXDebug->getLine(),
             'trace' => $exceptionWithXDebug->getTrace(),
             'xdebug' => 'xdebug_message',
-        );
+        ];
         
-        return array(
-            array($exception, $extra),
-            array($exceptionWithXDebug, $extraWithXDebug)
-        );
+        return [
+            [$exception, $extra],
+            [$exceptionWithXDebug, $extraWithXDebug]
+        ];
     }
     
     public function testLoggerIsCalledForPreviousExceptions()
     {
-        $loggerMock = $this->getMock(LoggerInterface::class);
-        $loggerMock->expects($this->exactly(2))->method('err');
-        $eventMock = $this->getMock(
-            MvcEvent::class,
-            array('getError', 'getParam')
-        );
-        
+        // Arrange
         $previousException = new Exception('PreviousException');
         $exception = new Exception('Exception', null, $previousException);
-        
+
+        $this->loggerMock->expects($this->exactly(2))->method('error');
+
+        $eventMock = $this->createMock(MvcEvent::class);
         $eventMock->expects($this->atLeastOnce())->method('getError')->willReturn('error-exception');
         $eventMock->expects($this->atLeastOnce())->method('getParam')->with('exception')->willReturn($exception);
-        
-        $mvcEventError = new MvcEventError($loggerMock);
-        $mvcEventError->onError($eventMock);
+
+        // Act
+        $this->mvcEventError->__invoke($eventMock);
+
+        // Assert
+        // ...
     }
     
     public function testLoggerIsNotCalledWhenNoError()
     {
-        $loggerMock = $this->getMock(LoggerInterface::class);
-        $loggerMock->expects($this->never())->method('err');
-        $eventMock = $this->getMock(MvcEvent::class);
-        
-        $mvcEventError = new MvcEventError($loggerMock);
-        $mvcEventError->onError($eventMock);
+        // Arrange
+        $this->loggerMock->expects($this->never())->method('error');
+
+        $eventMock = $this->createMock(MvcEvent::class);
+
+        // Act
+        $this->mvcEventError->__invoke($eventMock);
+
+        // Assert
+        // ...
     }
 }

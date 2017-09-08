@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="polderknowledge/log-module">
+    <description>The coding standards of polderknowledge/log-module</description>
+
+    <rule ref="vendor/polderknowledge/coding-standards/PolderKnowledge/ruleset.xml">
+    </rule>
+</ruleset>

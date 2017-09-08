@@ -1,10 +1,10 @@
 <?php
 /**
- * Polder Knowledge / LogModule (http://polderknowledge.nl)
+ * Polder Knowledge / log-module (https://polderknowledge.com)
  *
- * @link http://developers.polderknowledge.nl/gitlab/polderknowledge/log-module for the canonical source repository
- * @copyright Copyright (c) 2016-2017 Polder Knowledge (http://www.polderknowledge.nl)
- * @license http://polderknowledge.nl/license/proprietary proprietary
+ * @link https://github.com/polderknowledge/log-module for the canonical source repository
+ * @copyright Copyright (c) 2016-2017 Polder Knowledge (https://polderknowledge.com)
+ * @license https://github.com/polderknowledge/log-module/blob/master/LICENSE.md MIT
  */
 
 namespace PolderKnowledge\LogModule\TaskService;

@@ -1,53 +1,37 @@
 <?php
 /**
- * Polder Knowledge / LogModule (http://polderknowledge.nl)
+ * Polder Knowledge / log-module (https://polderknowledge.com)
  *
- * @link http://developers.polderknowledge.nl/gitlab/polderknowledge/log-module for the canonical source repository
- * @copyright Copyright (c) 2016-2017 Polder Knowledge (http://www.polderknowledge.nl)
- * @license http://polderknowledge.nl/license/proprietary proprietary
+ * @link https://github.com/polderknowledge/log-module for the canonical source repository
+ * @copyright Copyright (c) 2016-2017 Polder Knowledge (https://polderknowledge.com)
+ * @license https://github.com/polderknowledge/log-module/blob/master/LICENSE.md MIT
  */
 
 namespace PolderKnowledge\LogModule\Factory;
 
+use Interop\Container\ContainerInterface;
 use WShafer\PSR11MonoLog\ChannelChanger;
 use Zend\Log\Logger as ZendLogger;
 use Zend\Log\Writer\Psr;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 
 final class LoggerAbstractServiceFactory implements AbstractFactoryInterface
 {
-    /**
-     * Determine if we can create a service with name
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param $name
-     * @param $requestedName
-     * @return bool
-     */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
-        $channelChanger = $serviceLocator->get(ChannelChanger::class);
+        $channelChanger = $container->get(ChannelChanger::class);
 
         return $channelChanger->has($requestedName);
     }
 
-    /**
-     * Create service with name
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param $name
-     * @param $requestedName
-     * @return mixed
-     */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $channelChanger = $serviceLocator->get(ChannelChanger::class);
+        $channelChanger = $container->get(ChannelChanger::class);
 
         $channel = $channelChanger->get($requestedName);
 
         /** @var array $config */
-        $config = $serviceLocator->get('config');
+        $config = $container->get('config');
 
         if ($this->isZendLogger($config['monolog']['channels'][$requestedName])) {
             $zendLogger = new ZendLogger();
