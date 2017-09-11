@@ -9,11 +9,13 @@
 
 namespace PolderKnowledge\LogModule\Helper;
 
+use PolderKnowledge\LogModule\Helper\Exception\NoPsrLoggerAvailable;
 use ReflectionClass;
 use Zend\Log\Logger;
+use Zend\Log\Writer\Psr;
 
 /**
- * A helper class that logs a throwable object to a logger.
+ * A helper class that extracts a PSR logger from a Zend Logger.
  */
 final class ZendLogUtils
 {
@@ -21,11 +23,28 @@ final class ZendLogUtils
     {
         $writers = $logger->getWriters()->toArray();
 
-        $reflectionClass = new ReflectionClass($writers[0]);
+        $psrWriter = static::findPsrWriter($writers);
+
+        if (!$psrWriter) {
+            throw new NoPsrLoggerAvailable();
+        }
+
+        $reflectionClass = new ReflectionClass($psrWriter);
 
         $loggerProperty = $reflectionClass->getProperty('logger');
         $loggerProperty->setAccessible(true);
 
-        return $loggerProperty->getValue($writers[0]);
+        return $loggerProperty->getValue($psrWriter);
+    }
+
+    private static function findPsrWriter(array $writers)
+    {
+        foreach ($writers as $writer) {
+            if ($writer instanceof Psr) {
+                return $writer;
+            }
+        }
+
+        return null;
     }
 }

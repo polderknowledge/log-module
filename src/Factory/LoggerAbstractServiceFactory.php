@@ -30,10 +30,14 @@ final class LoggerAbstractServiceFactory implements AbstractFactoryInterface
 
         $channel = $channelChanger->get($requestedName);
 
+        if (!$channel) {
+            return null;
+        }
+
         /** @var array $config */
         $config = $container->get('config');
 
-        if ($this->isZendLogger($config['monolog']['channels'][$requestedName])) {
+        if ($this->isZendLogger($config['monolog']['channels'], $requestedName)) {
             $zendLogger = new ZendLogger();
             $zendLogger->addWriter(new Psr($channel));
 
@@ -43,12 +47,12 @@ final class LoggerAbstractServiceFactory implements AbstractFactoryInterface
         return $channel;
     }
 
-    private function isZendLogger(array $config)
+    private function isZendLogger(array $channels, $requestedName)
     {
-        if (!array_key_exists('zend-log', $config)) {
+        if (!array_key_exists('zend-log', $channels[$requestedName])) {
             return false;
         }
 
-        return $config['zend-log'] === true;
+        return $channels[$requestedName]['zend-log'] === true;
     }
 }

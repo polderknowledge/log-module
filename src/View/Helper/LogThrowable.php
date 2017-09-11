@@ -11,19 +11,38 @@ namespace PolderKnowledge\LogModule\View\Helper;
 
 use Exception;
 use PolderKnowledge\LogModule\TaskService\ExceptionLogger;
+use PolderKnowledge\LogModule\TaskService\ThrowableLogger;
+use Throwable;
 use Zend\View\Helper\AbstractHelper;
 
+/**
+ * A view helper that helps to log a throwable object.
+ */
 final class LogThrowable extends AbstractHelper
 {
-    private $exceptionLogger;
+    /**
+     * @var ThrowableLogger
+     */
+    private $logger;
 
-    public function __construct(ExceptionLogger $exceptionLogger)
+    /**
+     * Initializes a new instance of this class.
+     *
+     * @param ThrowableLogger $logger
+     */
+    public function __construct(ThrowableLogger $logger)
     {
-        $this->exceptionLogger = $exceptionLogger;
+        $this->logger = $logger;
     }
 
-    public function __invoke(Exception $exception)
+    /**
+     * Called when the view helper is invoked.
+     *
+     * @param Throwable $throwable The throwable object to log.
+     * @return void
+     */
+    public function __invoke(Throwable $throwable)
     {
-        return $this->exceptionLogger->logException($exception);
+        $this->logger->logThrowable($throwable);
     }
 }

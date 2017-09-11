@@ -9,10 +9,13 @@
 
 namespace PolderKnowledge\LogModule\Controller\Plugin;
 
-use PolderKnowledge\LogModule\Helper\ThrowableLogger;
+use PolderKnowledge\LogModule\TaskService\ThrowableLogger;
 use Throwable;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
+/**
+ * A controller plugin that helps to log a throwable object.
+ */
 final class LogThrowable extends AbstractPlugin
 {
     /**
@@ -33,7 +36,7 @@ final class LogThrowable extends AbstractPlugin
     /**
      * Called when a throwable should be logged.
      *
-     * @param Throwable $throwable
+     * @param Throwable $throwable The throwable object to log.
      */
     public function __invoke(Throwable $throwable)
     {

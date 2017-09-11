@@ -7,15 +7,14 @@
  * @license https://github.com/polderknowledge/log-module/blob/master/LICENSE.md MIT
  */
 
-namespace PolderKnowledgeTest\Log\Listener;
+namespace PolderKnowledge\LogModule\Listener;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use PolderKnowledge\LogModule\Listener\MvcEventError;
 use Psr\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
-class MvcEventErrorTest extends TestCase
+final class MvcEventErrorTest extends TestCase
 {
     private $loggerMock;
     private $mvcEventError;

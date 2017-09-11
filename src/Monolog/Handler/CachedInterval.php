@@ -80,15 +80,17 @@ final class CachedInterval extends AbstractProcessingHandler
 
     private function isExpired()
     {
-        $handle = fopen($this->store, 'a+');
-        $line = fgets($handle);
-        fclose($handle);
-
-        if (!$line) {
+        if (!file_exists($this->store)) {
             return false;
         }
 
-        $log = unserialize($line);
+        $lines = file($this->store);
+
+        if (!$lines) {
+            return false;
+        }
+
+        $log = unserialize($lines[0]);
 
         /** @var DateTime $logDate */
         $logDate = $log['datetime'];
