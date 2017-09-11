@@ -40,7 +40,7 @@ defined for this channel.
 
 ## Change log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please have a look at [the releases section](link-releases) for an overview of all changes.
 
 ## Testing
 
@@ -78,6 +78,7 @@ Please see [LICENSE.md][link-license] for the license of this application.
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/polderknowledge/log-module.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/polderknowledge/log-module.svg?style=flat-square
 
+[link-releases]: https://github.com/polderknowledge/log-module/releases
 [link-packagist]: https://packagist.org/packages/polderknowledge/log-module
 [link-travis]: https://travis-ci.org/polderknowledge/log-module
 [link-scrutinizer]: https://scrutinizer-ci.com/g/polderknowledge/log-module/code-structure
