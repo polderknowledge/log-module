@@ -11,9 +11,9 @@ sudo: false
 ## Cache composer
 cache:
   directories:
-    - $HOME/.composer/cache
-    - "$HOME/.local"
-    - mkdocs-theme
+  - "$HOME/.composer/cache"
+  - "$HOME/.local"
+  - mkdocs-theme
 
 env:
   global:
@@ -23,12 +23,12 @@ env:
     - GH_REF: github.com/polderknowledge/log-module.git
     - secure: "lMU80JU7/m7vZX1cJqcBDvCYi6/yNlJbdhL4cKnkPXUmqFRdvR+CUNEknngMFHZTibAfRXzP8IbJ1IodsZcxqcF734t0yAHI836OzkrpRp8yrsPbk1QeGnG+CRt49OOqdW+P0lz+yrFNHkz3rOowcDbxsRiNWJFu4L5bF6N6Iesl6IJsEzuWD3RvXM6/0/gidSMD2UViD/J4NDf53PeMfuz6zw49HJRy+8yNjkBQRuqx6cjE+AAyd4xazZ3ZFHkW1Faot/GsFWcQBAF8j9sKWp4F+wj0NaZOvxnC6eOTw46AkOhW24j9gQ9kKizFvOCI4tDP6tI2KrlyILLzAL+Wds/kS78swaH0X72EviOIR/cA1tDSDTH1zYrMTcdh0I2W9Fan3dinZRDcG+OuH63yvUuV2LF8+GHK5MvyZ2d3Xwj7nboyBzWl+TLynyfr5VZrpDkTgVFNHJs/zWX0HJWW1osWLPNNNNX/8QK2tMNlaksEVcEl1jcyENodbG7onpGy+PvjxFJ/qKYZb6KudIml2bnQDsFN4S+GMPebCLURY16wyCNx2ASDiOsNv1p6XuwFw6Nn+P1kZb+lluHLnm/p85xRcKSWNkHKI2TCWIni873OcL56eB8lM7ZSwAsWFPWnAa2G1gdRoo4pKxD6N1hi97Gf9QlS71mM8LIga357LC8="
 
+
 matrix:
   include:
-    - php: 7.0
-      env:
+  - php: 7.0
+    env:
         - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
-        - PATH="$HOME/.local/bin:$PATH"
 
 before_script:
   - travis_retry composer self-update
@@ -37,7 +37,6 @@ before_script:
 script:
   - vendor/bin/phpcs --standard=psr2 src/
   - vendor/bin/phpunit
-  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then wget -O theme-installer.sh "https://raw.githubusercontent.com/polderknowledge/mkdocs-theme/master/theme-installer.sh" ; chmod 755 theme-installer.sh ; ./theme-installer.sh ; fi
 
 after_script:
   - |
