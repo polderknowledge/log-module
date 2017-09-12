@@ -1,0 +1,11 @@
+docs_dir: docs/book
+site_dir: docs/html
+pages:
+    - index.md
+    - Configuration: configuration.md
+    - MVC Logging: mvc-logging.md
+    - Service Manager: service-manager.md
+site_name: log-module
+site_description: The log module sets up Monolog within a Zend\Mvc application.
+repo_url: 'https://github.com/polderknowledge/phpsettings-module'
+copyright: 'Copyright (c) 2002-2016 <a href="https://www.polderknowledge.com/">Polder Knowledge</a>'
