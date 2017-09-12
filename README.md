@@ -40,7 +40,7 @@ defined for this channel.
 
 ## Change log
 
-Please have a look at [the releases section](link-releases) for an overview of all changes.
+Please have a look at [the releases section][link-releases] for an overview of all changes.
 
 ## Testing
 
