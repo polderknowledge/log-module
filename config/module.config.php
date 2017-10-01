@@ -10,7 +10,6 @@
 namespace PolderKnowledge\LogModule;
 
 use Monolog\Logger;
-use PolderKnowledge\LogModule\Monolog\Handler\Factory\CachedInterval;
 
 return [
     'controller_plugins' => [
@@ -26,8 +25,6 @@ return [
         'channels' => [
             'ErrorLogger' => [
                 'handlers' => [
-                    'error-deduplication',
-                    'error-stream',
                 ],
                 'processors' => [
                     'error-http-params-get',
@@ -39,32 +36,6 @@ return [
             ],
         ],
         'handlers' => [
-            'error-cached-interval' => [
-                'type' => CachedInterval::class,
-                'options' => [
-                    'handler' => 'error-mailer',
-                    'interval' => 30,
-                ],
-            ],
-            'error-deduplication' => [
-                'type' => 'deduplication',
-                'options' => [
-                    'handler' => 'error-cached-interval',
-                    'deduplicationLevel' => Logger::DEBUG,
-                ],
-            ],
-            'error-mailer' => [
-                'type' => 'nativemailer',
-                'options' => [
-                    'to' => 'walter.tamboer@live.com',
-                ],
-            ],
-            'error-stream' => [
-                'type' => 'stream',
-                'options' => [
-                    'stream' => 'data/logs/php_log.' . date('Ymd'),
-                ],
-            ],
         ],
         'processors' => [
             'error-http-params-cookie' => [
