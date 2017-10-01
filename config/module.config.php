@@ -11,11 +11,6 @@ namespace PolderKnowledge\LogModule;
 
 use Monolog\Logger;
 use PolderKnowledge\LogModule\Monolog\Handler\Factory\CachedInterval;
-use PolderKnowledge\LogModule\Monolog\Processor\Factory\HttpCookieParamsTest;
-use PolderKnowledge\LogModule\Monolog\Processor\Factory\HttpGetParamsTest;
-use PolderKnowledge\LogModule\Monolog\Processor\Factory\HttpPostParamsTest;
-use PolderKnowledge\LogModule\Monolog\Processor\Factory\HttpSessionParamsTest;
-use PolderKnowledge\LogModule\Monolog\Processor\Factory\ServerParamsTest;
 
 return [
     'controller_plugins' => [
@@ -73,19 +68,19 @@ return [
         ],
         'processors' => [
             'error-http-params-cookie' => [
-                'type' => HttpCookieParamsTest::class,
+                'type' => Monolog\Processor\Factory\HttpCookieParams::class,
             ],
             'error-http-params-get' => [
-                'type' => HttpGetParamsTest::class,
+                'type' => Monolog\Processor\Factory\HttpGetParams::class,
             ],
             'error-http-params-post' => [
-                'type' => HttpPostParamsTest::class,
+                'type' => Monolog\Processor\Factory\HttpPostParams::class,
             ],
             'error-http-params-session' => [
-                'type' => HttpSessionParamsTest::class,
+                'type' => Monolog\Processor\Factory\HttpSessionParams::class,
             ],
             'error-server-params' => [
-                'type' => ServerParamsTest::class,
+                'type' => Monolog\Processor\Factory\ServerParams::class,
             ],
         ],
     ],
