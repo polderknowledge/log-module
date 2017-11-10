@@ -43,7 +43,7 @@ before_script:
 
 script:
   - vendor/bin/phpcs --standard=psr2 src/
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit ${PHPUNIT_FLAGS}
 
 after_script:
   - |
