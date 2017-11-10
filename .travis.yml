@@ -30,9 +30,6 @@ matrix:
   include:
   - php: 7.0
     env:
-       - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
-  - php: 7.0
-    env:
        - COMPOSER_FLAGS="--prefer-lowest"
        - PHPUNIT_FLAGS=""
 
@@ -50,8 +47,21 @@ after_script:
       wget https://scrutinizer-ci.com/ocular.phar
       php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
     fi
-  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then wget -O theme-installer.sh "https://raw.githubusercontent.com/polderknowledge/mkdocs-theme/master/theme-installer.sh" ; chmod 755 theme-installer.sh ; ./theme-installer.sh ; fi
-  - if [[ $DEPLOY_DOCS == "true" ]]; then ./mkdocs-theme/deploy.sh ; fi
+
+before_deploy:
+    - mkdir -p docs/html
+    - wget -O theme-installer.sh "https://raw.githubusercontent.com/polderknowledge/mkdocs-theme/master/theme-installer.sh"
+    - chmod 755 theme-installer.sh
+    - ./theme-installer.sh;
+    - ./mkdocs-theme/build.sh
+
+deploy:
+  local_dir: docs/html
+  provider: pages
+  skip_cleanup: true
+  github_token: $GH_TOKEN
+  on:
+    branch: master
 
 notifications:
   email: false
