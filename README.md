@@ -85,5 +85,5 @@ Please see [LICENSE.md][link-license] for the license of this application.
 [link-code-quality]: https://scrutinizer-ci.com/g/polderknowledge/log-module
 [link-downloads]: https://packagist.org/packages/polderknowledge/log-module
 [link-author]: https://polderknowledge.com
-[link-contributors]: ../../contributors
+[link-contributors]: https://github.com/polderknowledge/log-module/contributors
 [link-license]: LICENSE.md
