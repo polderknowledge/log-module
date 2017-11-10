@@ -13,7 +13,8 @@ use Interop\Container\ContainerInterface;
 use WShafer\PSR11MonoLog\ChannelChanger;
 use Zend\Log\Logger as ZendLogger;
 use Zend\Log\Writer\Psr;
-use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Zend\ServiceManager\AbstractFactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 final class LoggerAbstractServiceFactory implements AbstractFactoryInterface
 {
@@ -54,5 +55,31 @@ final class LoggerAbstractServiceFactory implements AbstractFactoryInterface
         }
 
         return $channels[$requestedName]['zend-log'] === true;
+    }
+
+    /**
+     * Determine if we can create a service with name
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param $name
+     * @param $requestedName
+     * @return bool
+     */
+    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    {
+        return $this->canCreate($serviceLocator, $requestedName);
+    }
+
+    /**
+     * Create service with name
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param $name
+     * @param $requestedName
+     * @return mixed
+     */
+    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    {
+        return $this($serviceLocator, $requestedName);
     }
 }

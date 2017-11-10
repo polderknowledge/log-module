@@ -13,7 +13,8 @@ use Interop\Container\ContainerInterface;
 use PolderKnowledge\LogModule\Helper\ZendLogUtils;
 use PolderKnowledge\LogModule\Listener\MvcEventError;
 use Zend\Log\Logger;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * A factory class that creates an event listener for MVC event errors in zendframework/zend-mvc
@@ -30,5 +31,16 @@ final class MvcEventErrorFactory implements FactoryInterface
         }
 
         return new MvcEventError($errorLogger);
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, 'ErrorLogger');
     }
 }
