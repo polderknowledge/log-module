@@ -21,6 +21,7 @@
         "mikey179/vfsStream": "^1.6",
         "phpunit/phpunit": "^6.3",
         "polderknowledge/build-tools": "^2.0",
+        "squizlabs/php_codesniffer": "^2.9",
         "zendframework/zend-log": "^2.9",
         "zendframework/zend-view": "^2.8"
     },
