@@ -18,7 +18,7 @@ cache:
 
 env:
   global:
-    - PHPUNIT_FLAGS: '--exclude-group legacy'
+    - PHPUNIT_FLAGS: '--exclude-group=legacy'
     - SITE_URL: https://polderknowledge.github.io/log-module
     - GH_USER_NAME: "Polder Knowledge"
     - GH_USER_EMAIL: opensource@polderknowledge.nl
@@ -30,12 +30,11 @@ matrix:
   include:
   - php: 7.0
     env:
-        - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
-  include:
-    - php: 7.0
-      env:
-        COMPOSER_FLAGS="--prefer-lowest"
-        PHPUNIT_FLAGS=""
+       - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
+  - php: 7.0
+    env:
+       - COMPOSER_FLAGS="--prefer-lowest"
+       - PHPUNIT_FLAGS=""
 
 before_script:
   - travis_retry composer self-update
