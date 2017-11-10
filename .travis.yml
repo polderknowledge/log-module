@@ -53,6 +53,7 @@ before_deploy:
     - wget -O theme-installer.sh "https://raw.githubusercontent.com/polderknowledge/mkdocs-theme/master/theme-installer.sh"
     - chmod 755 theme-installer.sh
     - ./theme-installer.sh;
+    - npm install -g gulp
     - ./mkdocs-theme/build.sh
 
 deploy:
