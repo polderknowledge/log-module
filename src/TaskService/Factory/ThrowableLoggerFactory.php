@@ -11,7 +11,8 @@ namespace PolderKnowledge\LogModule\TaskService\Factory;
 
 use Interop\Container\ContainerInterface;
 use PolderKnowledge\LogModule\TaskService\ThrowableLogger;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 final class ThrowableLoggerFactory implements FactoryInterface
 {
@@ -20,5 +21,16 @@ final class ThrowableLoggerFactory implements FactoryInterface
         $errorLogger = $container->get('ErrorLogger'); // @todo Should we make this dynamic?
 
         return new ThrowableLogger($errorLogger);
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, 'ErrorLogger');
     }
 }

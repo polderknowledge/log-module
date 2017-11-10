@@ -14,10 +14,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use WShafer\PSR11MonoLog\ChannelChanger;
 use Zend\Log\Logger;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 final class LoggerAbstractServiceFactoryTest extends TestCase
 {
-    private $container;
     private $channelChanger;
 
     protected function setUp()
@@ -25,9 +26,24 @@ final class LoggerAbstractServiceFactoryTest extends TestCase
         parent::setUp();
 
         $this->channelChanger = $this->getMockBuilder(ChannelChanger::class)->disableOriginalConstructor()->getMock();
+    }
 
-        $this->container = $this->getMockForAbstractClass(ContainerInterface::class);
-        $this->container->expects($this->at(0))->method('get')->with($this->equalTo(ChannelChanger::class))->willReturn($this->channelChanger);
+    /**
+     * @return ContainerInterface
+     */
+    private function givenAContainer()
+    {
+        $container = $this->getMockForAbstractClass(ContainerInterface::class);
+        $container->expects($this->at(0))->method('get')->with($this->equalTo(ChannelChanger::class))->willReturn($this->channelChanger);
+
+        return $container;
+    }
+
+    private function givenAServiceManager()
+    {
+        $serviceLocator = $this->getMockBuilder(ServiceManager::class)->getMock();
+        $serviceLocator->expects($this->at(0))->method('get')->with($this->equalTo(ChannelChanger::class))->willReturn($this->channelChanger);
+        return $serviceLocator;
     }
 
     public function testCanCreateWithExisting()
@@ -38,7 +54,21 @@ final class LoggerAbstractServiceFactoryTest extends TestCase
         $factory = new LoggerAbstractServiceFactory();
 
         // Act
-        $result = $factory->canCreate($this->container, 'existing');
+        $result = $factory->canCreate($this->givenAContainer(), 'existing');
+
+        // Assert
+        static::assertTrue($result);
+    }
+
+    public function testCanCreateWithExistingLegacy()
+    {
+        // Arrange
+        $this->channelChanger->expects($this->once())->method('has')->willReturn(true);
+
+        $factory = new LoggerAbstractServiceFactory();
+
+        // Act
+        $result = $factory->canCreateServiceWithName($this->givenAServiceManager(), 'existing', 'existing');
 
         // Assert
         static::assertTrue($result);
@@ -52,7 +82,21 @@ final class LoggerAbstractServiceFactoryTest extends TestCase
         $factory = new LoggerAbstractServiceFactory();
 
         // Act
-        $result = $factory->canCreate($this->container, 'non-existing');
+        $result = $factory->canCreate($this->givenAContainer(), 'non-existing');
+
+        // Assert
+        static::assertFalse($result);
+    }
+
+    public function testCanCreateWithNonExistingLegacy()
+    {
+        // Arrange
+        $this->channelChanger->expects($this->once())->method('has')->willReturn(false);
+
+        $factory = new LoggerAbstractServiceFactory();
+
+        // Act
+        $result = $factory->canCreate($this->givenAServiceManager(), 'non-existing'. 'non-existing');
 
         // Assert
         static::assertFalse($result);
@@ -66,7 +110,7 @@ final class LoggerAbstractServiceFactoryTest extends TestCase
         $factory = new LoggerAbstractServiceFactory();
 
         // Act
-        $result = $factory->__invoke($this->container, 'non-existing');
+        $result = $factory->__invoke($this->givenAContainer(), 'non-existing');
 
         // Assert
         static::assertNull($result);
@@ -78,7 +122,8 @@ final class LoggerAbstractServiceFactoryTest extends TestCase
     public function testInvokeWithExisting($loggerConfig, $expectedFqcn)
     {
         // Arrange
-        $this->container->expects($this->at(1))->method('get')->with($this->equalTo('config'))->willReturn([
+        $container = $this->givenAContainer();
+        $container->expects($this->at(1))->method('get')->with($this->equalTo('config'))->willReturn([
             'monolog' => [
                 'channels' => [
                     'existing' => $loggerConfig,
@@ -93,7 +138,35 @@ final class LoggerAbstractServiceFactoryTest extends TestCase
         $factory = new LoggerAbstractServiceFactory();
 
         // Act
-        $result = $factory->__invoke($this->container, 'existing');
+        $result = $factory->__invoke($container, 'existing');
+
+        // Assert
+        static::assertInstanceOf($expectedFqcn, $result);
+    }
+
+    /**
+     * @dataProvider provideLoggerConfig
+     */
+    public function testInvokeWithExistingLegacy($loggerConfig, $expectedFqcn)
+    {
+        // Arrange
+        $container = $this->givenAServiceManager();
+        $container->expects($this->at(1))->method('get')->with($this->equalTo('config'))->willReturn([
+            'monolog' => [
+                'channels' => [
+                    'existing' => $loggerConfig,
+                ],
+            ],
+        ]);
+
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+
+        $this->channelChanger->expects($this->once())->method('get')->willReturn($logger);
+
+        $factory = new LoggerAbstractServiceFactory();
+
+        // Act
+        $result = $factory->createServiceWithName($container, 'existing', 'existing');
 
         // Assert
         static::assertInstanceOf($expectedFqcn, $result);

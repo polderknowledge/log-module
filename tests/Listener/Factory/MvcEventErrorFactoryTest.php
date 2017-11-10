@@ -15,6 +15,8 @@ use PolderKnowledge\LogModule\Listener\MvcEventError;
 use Psr\Log\LoggerInterface;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Psr;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 final class MvcEventErrorFactoryTest extends TestCase
 {
@@ -30,6 +32,23 @@ final class MvcEventErrorFactoryTest extends TestCase
 
         // Act
         $result = $factory->__invoke($container, MvcEventError::class);
+
+        // Assert
+        static::assertInstanceOf(MvcEventError::class, $result);
+    }
+
+    public function testCreateService()
+    {
+        // Arrange
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+
+        $container = $this->getMockBuilder(ServiceManager::class)->getMock();
+        $container->expects($this->once())->method('get')->willReturn($logger);
+
+        $factory = new MvcEventErrorFactory();
+
+        // Act
+        $result = $factory->createService($container);
 
         // Assert
         static::assertInstanceOf(MvcEventError::class, $result);

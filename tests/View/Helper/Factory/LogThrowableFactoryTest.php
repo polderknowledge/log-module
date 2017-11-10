@@ -14,21 +14,49 @@ use PHPUnit\Framework\TestCase;
 use PolderKnowledge\LogModule\TaskService\ThrowableLogger;
 use PolderKnowledge\LogModule\View\Helper\LogThrowable;
 use Psr\Log\LoggerInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 
 final class LogThrowableFactoryTest extends TestCase
 {
+    /**
+     * @var AbstractPluginManager
+     */
+    private $pluginManager;
+
+    /** @var  ContainerInterface */
+    private $container;
+
+    protected function setUp()
+    {
+        $logger = new ThrowableLogger($this->getMockForAbstractClass(LoggerInterface::class));
+
+        $this->container = $this->getMockForAbstractClass(ContainerInterface::class);
+        $this->container->expects($this->once())->method('get')->willReturn($logger);
+        $this->pluginManager = $this->getMockForAbstractClass(AbstractPluginManager::class, [$this->container]);
+    }
+
     public function testLoggerCalled()
     {
         // Arrange
-        $logger = new ThrowableLogger($this->getMockForAbstractClass(LoggerInterface::class));
-
-        $container = $this->getMockForAbstractClass(ContainerInterface::class);
-        $container->expects($this->once())->method('get')->willReturn($logger);
-
         $factory = new LogThrowableFactory();
 
         // Act
-        $result = $factory->__invoke($container, LogThrowable::class);
+        $result = $factory->__invoke($this->container, LogThrowable::class);
+
+        // Assert
+        static::assertInstanceOf(LogThrowable::class, $result);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testLegacyFactoryMethod()
+    {
+        // Arrange
+        $factory = new LogThrowableFactory();
+
+        // Act
+        $result = $factory->createService($this->pluginManager);
 
         // Assert
         static::assertInstanceOf(LogThrowable::class, $result);
