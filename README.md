@@ -28,10 +28,6 @@ return [
 ];
 ```
 
-Last but not least, copy over the dist configuration files located the `config/` directory to
-your application's autoload directory.
-
-
 ## Usage
 
 This module has a predefined `ErrorLogger` logging channel configured. This channel is used to write PHP notices, 
