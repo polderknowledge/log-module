@@ -21,7 +21,7 @@ final class MvcEventError
      * @var LoggerInterface
      */
     protected $logger;
-    
+
     /**
      * @param LoggerInterface $logger
      */
@@ -39,7 +39,7 @@ final class MvcEventError
     {
         return $this->logger;
     }
-    
+
     /**
      * Should be called when an MvcEvent is fired.
      *
@@ -53,27 +53,7 @@ final class MvcEventError
         }
 
         $exception = $event->getParam('exception');
-        $logMessages = [];
 
-        do {
-            $extra = array(
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-                'trace' => $exception->getTrace(),
-            );
-            if (isset($exception->xdebug_message)) {
-                $extra['xdebug'] = $exception->xdebug_message;
-            }
-
-            $logMessages[] = array(
-                'message' => $exception->getMessage(),
-                'extra' => $extra,
-            );
-            $exception = $exception->getPrevious();
-        } while ($exception);
-
-        foreach (array_reverse($logMessages) as $logMessage) {
-            $this->logger->error($logMessage['message'], $logMessage['extra']);
-        }
+        $this->logger->error($exception->getMessage(), ['exception' => $exception]);
     }
 }

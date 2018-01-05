@@ -38,58 +38,12 @@ final class MvcEventErrorTest extends TestCase
         // Assert
         static::assertSame($this->loggerMock, $result);
     }
-    
-    /**
-     * @dataProvider expectedParamsProvider
-     */
-    public function testLoggerIsCalledWithExpectedParams($exception, $extra)
+
+    public function testLoggerIsCalledWithExpectedParams()
     {
         // Arrange
-        $this->loggerMock->expects($this->once())->method('error')->with('Exception', $extra);
-
-        $eventMock = $this->createMock(MvcEvent::class);
-        $eventMock->expects($this->atLeastOnce())->method('getError')->willReturn('error-exception');
-        $eventMock->expects($this->atLeastOnce())->method('getParam')->with('exception')->willReturn($exception);
-
-        // Act
-        $this->mvcEventError->__invoke($eventMock);
-
-        // Assert
-        // ...
-    }
-    
-    public function expectedParamsProvider()
-    {
-        $exception = new Exception('Exception');
-        $exceptionWithXDebug = new Exception('Exception');
-        $exceptionWithXDebug->xdebug_message = 'xdebug_message';
-        
-        $extra = [
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
-            'trace' => $exception->getTrace(),
-        ];
-        
-        $extraWithXDebug = [
-            'file' => $exceptionWithXDebug->getFile(),
-            'line' => $exceptionWithXDebug->getLine(),
-            'trace' => $exceptionWithXDebug->getTrace(),
-            'xdebug' => 'xdebug_message',
-        ];
-        
-        return [
-            [$exception, $extra],
-            [$exceptionWithXDebug, $extraWithXDebug]
-        ];
-    }
-    
-    public function testLoggerIsCalledForPreviousExceptions()
-    {
-        // Arrange
-        $previousException = new Exception('PreviousException');
-        $exception = new Exception('Exception', null, $previousException);
-
-        $this->loggerMock->expects($this->exactly(2))->method('error');
+        $exception = new Exception('Exception message');
+        $this->loggerMock->expects($this->once())->method('error')->with('Exception message', ['exception' => $exception]);
 
         $eventMock = $this->createMock(MvcEvent::class);
         $eventMock->expects($this->atLeastOnce())->method('getError')->willReturn('error-exception');

@@ -10,6 +10,8 @@
 namespace PolderKnowledge\LogModule;
 
 use Monolog\Logger;
+use PolderKnowledge\LogModule\Formatter\HumanReadableExceptionFormatter;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'controller_plugins' => [
@@ -34,6 +36,9 @@ return [
                     'error-server-params',
                 ],
             ],
+        ],
+        'formatters' => [
+
         ],
         'handlers' => [
         ],
@@ -61,6 +66,7 @@ return [
         ],
         'factories' => [
             Listener\MvcEventError::class => Listener\Factory\MvcEventErrorFactory::class,
+            HumanReadableExceptionFormatter::class => InvokableFactory::class,
         ],
     ],
     'view_helpers' => [
