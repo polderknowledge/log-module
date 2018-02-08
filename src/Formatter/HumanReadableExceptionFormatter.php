@@ -22,7 +22,7 @@ class HumanReadableExceptionFormatter extends NormalizerFormatter implements For
 
     protected function printWithoutException(array $record): string
     {
-        return sprintf('[%s] %s: %s', ...[
+        return sprintf("[%s] %s: %s\n", ...[
             date('r'),
             $record['level_name'],
             $record['message']
