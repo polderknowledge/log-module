@@ -2,14 +2,13 @@
 
 namespace PolderKnowledge\LogModule\Formatter;
 
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
+use Monolog\Formatter\NormalizerFormatter;
 use WShafer\PSR11MonoLog\FactoryInterface;
 
 /**
  * Format an Exception in a similar way PHP does by default when an exception bubbles to the top
  */
-class HumanReadableExceptionFormatter extends LineFormatter implements FactoryInterface
+class HumanReadableExceptionFormatter extends NormalizerFormatter implements FactoryInterface
 {
     public function __invoke(array $options)
     {
@@ -22,18 +21,9 @@ class HumanReadableExceptionFormatter extends LineFormatter implements FactoryIn
 
     public function format(array $record): string
     {
-        $exception = $record['context']['exception'] ?? null;
+        $throwable = $record['context']['exception'] ?? null;
 
-        if (!$exception) {
-            return parent::format($record);
-        }
-
-        return $this->printFromThrowable($record, $exception);
-    }
-
-    protected function printFromThrowable(array $record, \Throwable $throwable)
-    {
-        $record = $this->normalize($record);
+        $record = parent::format($record);
 
         $result = sprintf(
             "[%s] %s.%s: %s\n\n",
