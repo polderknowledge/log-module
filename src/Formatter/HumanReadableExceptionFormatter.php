@@ -33,6 +33,21 @@ class HumanReadableExceptionFormatter extends NormalizerFormatter implements Fac
             $record['message']
         );
 
+        if (isset($record['context']['file'])) {
+            $result .= "[Context]\n\n";
+
+            if (isset($record['context']['message'])) {
+                $result .= sprintf("  Message: %s\n", $record['context']['message']);
+            }
+
+            $result .= sprintf("  File: %s\n", $record['context']['file']);
+            $result .= sprintf("  Line: %d\n", $record['context']['line']);
+
+            if (isset($record['context']['code'])) {
+                $result .= sprintf("  Code: %s\n\n", $record['context']['code']);
+            }
+        }
+
         $exceptionCounter = 1;
 
         while ($throwable !== null) {
