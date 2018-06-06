@@ -2,14 +2,13 @@
 
 namespace PolderKnowledge\LogModule\Formatter;
 
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\NormalizerFormatter;
+use Monolog\Formatter\LineFormatter;
 use WShafer\PSR11MonoLog\FactoryInterface;
 
 /**
  * Format an Exception in a similar way PHP does by default when an exception bubbles to the top
  */
-class HumanReadableExceptionFormatter extends NormalizerFormatter implements FormatterInterface, FactoryInterface
+class HumanReadableExceptionFormatter extends LineFormatter implements FactoryInterface
 {
     public function __invoke(array $options)
     {
@@ -23,25 +22,47 @@ class HumanReadableExceptionFormatter extends NormalizerFormatter implements For
     public function format(array $record): string
     {
         $exception = $record['context']['exception'] ?? null;
-        if ($exception) {
-            return $this->printFromException($exception);
-        } else {
-            return $this->printWithoutException($record);
+
+        if (!$exception) {
+            return parent::format($record);
         }
+
+        return $this->printFromThrowable($record, $exception);
     }
 
-    protected function printWithoutException(array $record): string
+    protected function printFromThrowable(array $record, \Throwable $throwable)
     {
-        return sprintf("[%s] %s: %s\n", ...[
-            date('r'),
+        $record = $this->normalize($record);
+
+        $result = sprintf(
+            "[%s] %s.%s: %s\n\n",
+            $record['datetime'],
+            $record['channel'],
             $record['level_name'],
             $record['message']
-        ]);
+        );
+
+        $result .= "[Context]\n";
+        $result .= sprintf("  Type: %s\n", get_class($throwable));
+        $result .= sprintf("  Code: %d\n", $throwable->getCode());
+        $result .= sprintf("  File: %s\n", $throwable->getFile());
+        $result .= sprintf("  Line: %d\n\n", $throwable->getLine());
+
+        $result .= "[Trace]\n";
+        $result .= $this->buildTraceOutput($throwable->getTraceAsString());
+        $result .= "\n\n";
+
+        return $result;
     }
-    
-    protected function printFromException(\Throwable $exception)
+
+    private function buildTraceOutput($trace)
     {
-        return implode("\n", ExceptionPrinter::linesFromException($exception)) . "\n"
-            . "---------------------------------------\n";
+        $lines = explode("\n", $trace);
+
+        $indented = array_map(function ($item) {
+            return '  ' . $item;
+        }, $lines);
+
+        return implode("\n", $indented);
     }
 }
