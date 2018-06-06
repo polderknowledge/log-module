@@ -2,6 +2,7 @@
 
 namespace PolderKnowledge\LogModule\Formatter;
 
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use WShafer\PSR11MonoLog\FactoryInterface;
 
@@ -42,25 +43,43 @@ class HumanReadableExceptionFormatter extends LineFormatter implements FactoryIn
             $record['message']
         );
 
-        $result .= "[Context]\n";
-        $result .= sprintf("  Type: %s\n", get_class($throwable));
-        $result .= sprintf("  Code: %d\n", $throwable->getCode());
-        $result .= sprintf("  File: %s\n", $throwable->getFile());
-        $result .= sprintf("  Line: %d\n\n", $throwable->getLine());
+        $exceptionCounter = 1;
 
-        $result .= "[Trace]\n";
-        $result .= $this->buildTraceOutput($throwable->getTraceAsString());
-        $result .= "\n\n";
+        while ($throwable !== null) {
+            $result .= sprintf("[Exception #%d]\n", $exceptionCounter++);
+            $result .= sprintf("  Type: %s\n", get_class($throwable));
+            $result .= sprintf("  Message: %s\n", $throwable->getMessage());
+            $result .= sprintf("  Code: %d\n", $throwable->getCode());
+            $result .= sprintf("  File: %s\n", $throwable->getFile());
+            $result .= sprintf("  Line: %d\n\n", $throwable->getLine());
+
+            $result .= "[Trace]\n";
+            $result .= $this->indentLines($throwable->getTraceAsString());
+            $result .= "\n\n";
+
+            $throwable = $throwable->getPrevious();
+        }
+
+        foreach ($record['extra'] as $key => $params) {
+            if (is_array($params) || is_object($params)) {
+                $lines = json_encode($params, JSON_PRETTY_PRINT | JSON_FORCE_OBJECT);
+            } else {
+                $lines = $params;
+            }
+
+            $result .= "[Extra - " . $key . "]\n";
+            $result .= $this->indentLines($lines) . "\n\n";
+        }
 
         return $result;
     }
 
-    private function buildTraceOutput($trace)
+    private function indentLines(string $input, int $spaces = 2)
     {
-        $lines = explode("\n", $trace);
+        $lines = explode("\n", $input);
 
-        $indented = array_map(function ($item) {
-            return '  ' . $item;
+        $indented = array_map(function ($item) use ($spaces) {
+            return str_repeat(' ', $spaces) . $item;
         }, $lines);
 
         return implode("\n", $indented);
