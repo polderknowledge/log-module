@@ -10,7 +10,10 @@ final class DailyStream implements FactoryInterface
 {
     public function __invoke(array $options)
     {
-        $stream = $this->getStream($options['stream'] ?? null);
+        $stream = $this->getStream(
+            $options['stream'] ?? null,
+            $options['dateFormat'] ?? 'Ymd'
+        );
 
         $level = (int)($options['level'] ?? Logger::DEBUG);
         $bubble = (boolean)($options['bubble'] ?? true);
@@ -20,12 +23,12 @@ final class DailyStream implements FactoryInterface
         return new StreamHandler($stream, $level, $bubble, $filePermission, $useLocking);
     }
 
-    protected function getStream($stream)
+    protected function getStream($stream, $dateFormat)
     {
         if (is_resource($stream)) {
             return $stream;
         }
 
-        return sprintf((string)$stream, date('Ymd'));
+        return sprintf((string)$stream, date($dateFormat));
     }
 }
