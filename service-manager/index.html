@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    <title></title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.6.3/css/font-awesome.min.css" integrity="sha256-AIodEDkC8V/bHBkfyxzolUMw57jeQ9CauwhVW6YJ9CA=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/styles-1513b055a7.css">
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://polderknowledge.com" data-toggle="tooltip" data-placement="bottom" title="Polder Knowledge"><img src="../img/logo.svg" height="28" alt="Polder Knowledge" /></a>
+              <a href="">log-module</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../configuration/">Configuration</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../mvc-logging/">MVC Logging</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Service Manager</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../CONDUCT/">Conduct</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../CONTRIBUTING/">Contributing</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../LICENSE/">Licence</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li>-->
+                    <!--<a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">-->
+                        <!--<i class="fa fa-book"></i> Components-->
+                    <!--</a>-->
+                <!--</li>-->
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/polderknowledge/log-module/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div id="page-top" class="container docs">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#service-manager">Service Manager</a></li>
+        
+            <li><a href="#injecting-loggers-into-controllers">Injecting loggers into Controllers</a></li>
+        
+    
+    </ul>
+
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="">log-module</a> &raquo;</li>
+  
+    
+  
+  <li class="active">Service Manager</li>
+</ol>
+
+<h1 id="service-manager">Service Manager</h1>
+<p>This module provides a LoggerAbstractServiceFactory which can be 
+used to setup loggers quickly. The factory is already registered
+so it can be used straight away.</p>
+<pre class="codehilite"><code class="language-php">&lt;?php
+
+return [
+    'monolog' =&gt; [
+        'channels' =&gt; [
+            'SomeLogger' =&gt; [
+                'handlers' =&gt; [
+                    'outputstream',
+                ],
+                'processors' =&gt; [
+                    'my-processor',
+                ],
+            ],
+        ],
+        'handlers' =&gt; [
+            'outputstream' =&gt; [
+                'type' =&gt; 'stream',
+                'options' =&gt; [
+                    'stream' =&gt; 'php://output',
+                ],
+            ],
+        ],
+        'processors' =&gt; [
+            'my-processor' =&gt; [
+                // ...
+            ],
+        ],
+    ],
+];</code></pre>
+
+<h2 id="injecting-loggers-into-controllers">Injecting loggers into Controllers</h2>
+<p>Simply retrieve them from the container, the abstract service 
+factory will create it for you.</p>
+<pre class="codehilite"><code class="language-php">final class MyControllerFactory implements FactoryInterface
+{
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $logger = $container-&gt;get('CommandLog');
+
+        return new MyController($logger);
+    }
+}</code></pre>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous">
+      <a rel="prev" href="../mvc-logging/"><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next">
+      <a rel="next" href="../CONDUCT/">Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <div id="footerwrap">
+    <div class="container">
+        <div class="row site-map">
+            <div class="col-lg-3">
+              <p>
+                <strong>Polder Knowledge</strong><br />
+              </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 centered">
+                <a class="back-to-top" href="#page-top"><i class="fa fa-chevron-circle-up fa-4" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="spacing"></div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Copyright</h4>
+                <div class="hline-w"></div>
+
+                <p>Copyright &COPY; 2002-2017 <a href="https://www.polderknowledge.com/">Polder Knowledge</a></p>
+            </div>
+
+            <div class="col-lg-4">
+                <h4>Contacts</h4>
+                <div class="hline-w"></div>
+                <p>
+                    <a href="irc://irc.freenode.net/polderknowledge" class="btn-social btn-outline" alt="IRC" title="IRC"><i class="fa fa-comment"></i></a>
+                    <a href="https://github.com/polderknowledge" class="btn-social btn-outline" alt="Github" title="Github"><i class="fa fa-github"></i></a>
+                    <a href="https://twitter.com/polderknowledge" class="btn-social btn-outline" alt="Twitter" title="Twitter"><i class="fa fa-twitter"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="//cdn.jsdelivr.net/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo=" crossorigin="anonymous"></script>
+    <script>var base_url = '..';</script>
+    <script src="../js/scripts-8ff3cb2b23.js"></script>
+    <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://polderknowledge.com" data-toggle="tooltip" data-placement="bottom" title="Go to the Polder Knowledge homepage"><img src="../img/logo.svg" alt="Polder Knowledge" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+</body>
+
+</html>

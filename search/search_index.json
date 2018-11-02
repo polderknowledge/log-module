@@ -1,0 +1,164 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "log-module\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe log module is a Zend Framework module that provides support for Monolog logger channels. This module also comes\nwith a standard error logger enabled which is used to log PHP notices, warnings and errors in applications.\n\n\nInstall\n\n\nVia Composer\n\n\n$ composer require polderknowledge/log-module\n\n\n\nNext add the module to the module config (usually \nconfig/modules.php\n or \nconfig/application.config.php\n):\n\n\nreturn [\n    'modules' =\n [\n        'PolderKnowledge\\\\LogModule',\n    ],\n];\n\n\n\nUsage\n\n\nThis module has a predefined \nErrorLogger\n logging channel configured. This channel is used to write PHP notices, \nwarnings and errors to. Since it depends on the application on how to handle these messages, there are no handlers \ndefined for this channel.\n\n\nChange log\n\n\nPlease have a look at \nthe releases section\n for an overview of all changes.\n\n\nTesting\n\n\n$ composer test\n\n\n\nContributing\n\n\nPlease see \nCONTRIBUTING\n and \nCONDUCT\n for details.\n\n\nSecurity\n\n\nIf you discover any security related issues, please report them via \nHackerOne\n \ninstead of using the issue tracker or e-mail.\n\n\nCommunity\n\n\nWe have an IRC channel where you can find us every now and then. We're on the Freenode network in the\nchannel #polderknowledge.\n\n\nCredits\n\n\n\n\nPolder Knowledge\n\n\nAll Contributors\n\n\n\n\nLicense\n\n\nPlease see \nLICENSE.md\n for the license of this application.", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#log-module", 
+            "text": "The log module is a Zend Framework module that provides support for Monolog logger channels. This module also comes\nwith a standard error logger enabled which is used to log PHP notices, warnings and errors in applications.", 
+            "title": "log-module"
+        }, 
+        {
+            "location": "/#install", 
+            "text": "Via Composer  $ composer require polderknowledge/log-module  Next add the module to the module config (usually  config/modules.php  or  config/application.config.php ):  return [\n    'modules' =  [\n        'PolderKnowledge\\\\LogModule',\n    ],\n];", 
+            "title": "Install"
+        }, 
+        {
+            "location": "/#usage", 
+            "text": "This module has a predefined  ErrorLogger  logging channel configured. This channel is used to write PHP notices, \nwarnings and errors to. Since it depends on the application on how to handle these messages, there are no handlers \ndefined for this channel.", 
+            "title": "Usage"
+        }, 
+        {
+            "location": "/#change-log", 
+            "text": "Please have a look at  the releases section  for an overview of all changes.", 
+            "title": "Change log"
+        }, 
+        {
+            "location": "/#testing", 
+            "text": "$ composer test", 
+            "title": "Testing"
+        }, 
+        {
+            "location": "/#contributing", 
+            "text": "Please see  CONTRIBUTING  and  CONDUCT  for details.", 
+            "title": "Contributing"
+        }, 
+        {
+            "location": "/#security", 
+            "text": "If you discover any security related issues, please report them via  HackerOne  \ninstead of using the issue tracker or e-mail.", 
+            "title": "Security"
+        }, 
+        {
+            "location": "/#community", 
+            "text": "We have an IRC channel where you can find us every now and then. We're on the Freenode network in the\nchannel #polderknowledge.", 
+            "title": "Community"
+        }, 
+        {
+            "location": "/#credits", 
+            "text": "Polder Knowledge  All Contributors", 
+            "title": "Credits"
+        }, 
+        {
+            "location": "/#license", 
+            "text": "Please see  LICENSE.md  for the license of this application.", 
+            "title": "License"
+        }, 
+        {
+            "location": "/configuration/", 
+            "text": "Configuration\n\n\nBelow you can find a full example on how to create loggers:\n\n\n?php\n\nreturn [\n    'monolog' =\n [\n        'channels' =\n [\n            'OutputLogger' =\n [\n                'handlers' =\n [\n                    'outputstream',\n                ],\n                'processors' =\n [\n                    'MyProcessor',\n                ],\n            ],\n        ],\n        'handlers' =\n [\n            'outputstream' =\n [\n                'type' =\n 'stream',\n                'formatter' =\n 'MyFormatter',\n                'options' =\n [\n                    'stream' =\n 'php://output',\n                ],\n            ],\n        ],\n        'formatters' =\n [\n            'MyFormatter' =\n [\n                'type' =\n 'line',\n                'options' =\n [\n                    'format' =\n \"[%datetime%] %channel%.%level_name%: %message% %context% %extra%\\n\",\n                    'dateFormat' =\n \"c\",\n                    'allowInlineLineBreaks' =\n true,\n                    'ignoreEmptyContextAndExtra' =\n false,\n                ],\n            ],\n        ],\n        'processors' =\n [\n            'MyProcessor' =\n [\n                'type' =\n 'uid',\n                'options' =\n [\n                    'length'  =\n 7,\n                ],\n            ],\n        ],\n    ],\n];\n\n\n\nFor backwards compatibility it's possible to create a \n\nZend\\Log\\Logger\n instance by setting \nzend-log\n to \ntrue\n.\nSee the example below:\n\n\n?php\n\nreturn [\n    'monolog' =\n [\n        'channels' =\n [\n            'MyZendLogger' =\n [\n                'zend-log' =\n true,\n                'handlers' =\n [\n                    'outputstream',\n                ],\n            ],\n        ],\n        'handlers' =\n [\n            'outputstream' =\n [\n                'type' =\n 'stream',\n                'options' =\n [\n                    'stream' =\n 'php://output',\n                ],\n            ],\n        ],\n    ],\n];\n\n\n\nFormatters, Handlers and Processors\n\n\nFor a full list of all available formatters, handlers and \nprocessors, take a look at https://github.com/wshafer/psr11-monolog\nThat is the library we based this module on.", 
+            "title": "Configuration"
+        }, 
+        {
+            "location": "/configuration/#configuration", 
+            "text": "Below you can find a full example on how to create loggers:  ?php\n\nreturn [\n    'monolog' =  [\n        'channels' =  [\n            'OutputLogger' =  [\n                'handlers' =  [\n                    'outputstream',\n                ],\n                'processors' =  [\n                    'MyProcessor',\n                ],\n            ],\n        ],\n        'handlers' =  [\n            'outputstream' =  [\n                'type' =  'stream',\n                'formatter' =  'MyFormatter',\n                'options' =  [\n                    'stream' =  'php://output',\n                ],\n            ],\n        ],\n        'formatters' =  [\n            'MyFormatter' =  [\n                'type' =  'line',\n                'options' =  [\n                    'format' =  \"[%datetime%] %channel%.%level_name%: %message% %context% %extra%\\n\",\n                    'dateFormat' =  \"c\",\n                    'allowInlineLineBreaks' =  true,\n                    'ignoreEmptyContextAndExtra' =  false,\n                ],\n            ],\n        ],\n        'processors' =  [\n            'MyProcessor' =  [\n                'type' =  'uid',\n                'options' =  [\n                    'length'  =  7,\n                ],\n            ],\n        ],\n    ],\n];  For backwards compatibility it's possible to create a  Zend\\Log\\Logger  instance by setting  zend-log  to  true .\nSee the example below:  ?php\n\nreturn [\n    'monolog' =  [\n        'channels' =  [\n            'MyZendLogger' =  [\n                'zend-log' =  true,\n                'handlers' =  [\n                    'outputstream',\n                ],\n            ],\n        ],\n        'handlers' =  [\n            'outputstream' =  [\n                'type' =  'stream',\n                'options' =  [\n                    'stream' =  'php://output',\n                ],\n            ],\n        ],\n    ],\n];", 
+            "title": "Configuration"
+        }, 
+        {
+            "location": "/configuration/#formatters-handlers-and-processors", 
+            "text": "For a full list of all available formatters, handlers and \nprocessors, take a look at https://github.com/wshafer/psr11-monolog\nThat is the library we based this module on.", 
+            "title": "Formatters, Handlers and Processors"
+        }, 
+        {
+            "location": "/mvc-logging/", 
+            "text": "MVC Error Logging\n\n\nThis module will catch all errors that are triggered in the \nMvcEvent::DISPATCH_ERROR\n and \nMvcEvent::RENDER_ERROR\n \nevents. These errors are written to the \nErrorLogger\n channel.\n\n\nIt's also possible to manually log throwable objects. This module implements a view helper and a controller plugin \nwhich can be used to log those throwable objects. Simply call \n$this-\nlogThrowable($exception);\n from the view or the \ncontroller.\n\n\nThe view helper and controller plugin both make use of the \nThrowableLogger\n helper which can be retrieved from the \nservice manager: \n$container-\nget(\\PolderKnowledge\\LogModule\\TaskService\\ExceptionLogger::class);", 
+            "title": "MVC Logging"
+        }, 
+        {
+            "location": "/mvc-logging/#mvc-error-logging", 
+            "text": "This module will catch all errors that are triggered in the  MvcEvent::DISPATCH_ERROR  and  MvcEvent::RENDER_ERROR  \nevents. These errors are written to the  ErrorLogger  channel.  It's also possible to manually log throwable objects. This module implements a view helper and a controller plugin \nwhich can be used to log those throwable objects. Simply call  $this- logThrowable($exception);  from the view or the \ncontroller.  The view helper and controller plugin both make use of the  ThrowableLogger  helper which can be retrieved from the \nservice manager:  $container- get(\\PolderKnowledge\\LogModule\\TaskService\\ExceptionLogger::class);", 
+            "title": "MVC Error Logging"
+        }, 
+        {
+            "location": "/service-manager/", 
+            "text": "Service Manager\n\n\nThis module provides a LoggerAbstractServiceFactory which can be \nused to setup loggers quickly. The factory is already registered\nso it can be used straight away.\n\n\n?php\n\nreturn [\n    'monolog' =\n [\n        'channels' =\n [\n            'SomeLogger' =\n [\n                'handlers' =\n [\n                    'outputstream',\n                ],\n                'processors' =\n [\n                    'my-processor',\n                ],\n            ],\n        ],\n        'handlers' =\n [\n            'outputstream' =\n [\n                'type' =\n 'stream',\n                'options' =\n [\n                    'stream' =\n 'php://output',\n                ],\n            ],\n        ],\n        'processors' =\n [\n            'my-processor' =\n [\n                // ...\n            ],\n        ],\n    ],\n];\n\n\n\nInjecting loggers into Controllers\n\n\nSimply retrieve them from the container, the abstract service \nfactory will create it for you.\n\n\nfinal class MyControllerFactory implements FactoryInterface\n{\n    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)\n    {\n        $logger = $container-\nget('CommandLog');\n\n        return new MyController($logger);\n    }\n}", 
+            "title": "Service Manager"
+        }, 
+        {
+            "location": "/service-manager/#service-manager", 
+            "text": "This module provides a LoggerAbstractServiceFactory which can be \nused to setup loggers quickly. The factory is already registered\nso it can be used straight away.  ?php\n\nreturn [\n    'monolog' =  [\n        'channels' =  [\n            'SomeLogger' =  [\n                'handlers' =  [\n                    'outputstream',\n                ],\n                'processors' =  [\n                    'my-processor',\n                ],\n            ],\n        ],\n        'handlers' =  [\n            'outputstream' =  [\n                'type' =  'stream',\n                'options' =  [\n                    'stream' =  'php://output',\n                ],\n            ],\n        ],\n        'processors' =  [\n            'my-processor' =  [\n                // ...\n            ],\n        ],\n    ],\n];", 
+            "title": "Service Manager"
+        }, 
+        {
+            "location": "/service-manager/#injecting-loggers-into-controllers", 
+            "text": "Simply retrieve them from the container, the abstract service \nfactory will create it for you.  final class MyControllerFactory implements FactoryInterface\n{\n    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)\n    {\n        $logger = $container- get('CommandLog');\n\n        return new MyController($logger);\n    }\n}", 
+            "title": "Injecting loggers into Controllers"
+        }, 
+        {
+            "location": "/CONDUCT/", 
+            "text": "Contributor Code of Conduct\n\n\nOur Pledge\n\n\nIn the interest of fostering an open and welcoming environment, we as\ncontributors and maintainers pledge to making participation in our project and\nour community a harassment-free experience for everyone, regardless of age, body\nsize, disability, ethnicity, gender identity and expression, level of experience,\nnationality, personal appearance, race, religion, or sexual identity and\norientation.\n\n\nOur Standards\n\n\nExamples of behavior that contributes to creating a positive environment\ninclude:\n\n\n\n\nUsing welcoming and inclusive language\n\n\nBeing respectful of differing viewpoints and experiences\n\n\nGracefully accepting constructive criticism\n\n\nFocusing on what is best for the community\n\n\nShowing empathy towards other community members\n\n\n\n\nExamples of unacceptable behavior by participants include:\n\n\n\n\nThe use of sexualized language or imagery and unwelcome sexual attention or\nadvances\n\n\nTrolling, insulting/derogatory comments, and personal or political attacks\n\n\nPublic or private harassment\n\n\nPublishing others' private information, such as a physical or electronic\n  address, without explicit permission\n\n\nOther conduct which could reasonably be considered inappropriate in a\n  professional setting\n\n\n\n\nOur Responsibilities\n\n\nProject maintainers are responsible for clarifying the standards of acceptable\nbehavior and are expected to take appropriate and fair corrective action in\nresponse to any instances of unacceptable behavior.\n\n\nProject maintainers have the right and responsibility to remove, edit, or\nreject comments, commits, code, wiki edits, issues, and other contributions\nthat are not aligned to this Code of Conduct, or to ban temporarily or\npermanently any contributor for other behaviors that they deem inappropriate,\nthreatening, offensive, or harmful.\n\n\nScope\n\n\nThis Code of Conduct applies both within project spaces and in public spaces\nwhen an individual is representing the project or its community. Examples of\nrepresenting a project or community include using an official project e-mail\naddress, posting via an official social media account, or acting as an appointed\nrepresentative at an online or offline event. Representation of a project may be\nfurther defined and clarified by project maintainers.\n\n\nEnforcement\n\n\nInstances of abusive, harassing, or otherwise unacceptable behavior may be\nreported by contacting the project team at \nwij@polderknowledge.nl\n. All\ncomplaints will be reviewed and investigated and will result in a response that\nis deemed necessary and appropriate to the circumstances. The project team is\nobligated to maintain confidentiality with regard to the reporter of an incident.\nFurther details of specific enforcement policies may be posted separately.\n\n\nProject maintainers who do not follow or enforce the Code of Conduct in good\nfaith may face temporary or permanent repercussions as determined by other\nmembers of the project's leadership.\n\n\nAttribution\n\n\nThis Code of Conduct is adapted from the \nContributor Covenant\n, version 1.4,\navailable at \nhttp://contributor-covenant.org/version/1/4", 
+            "title": "Conduct"
+        }, 
+        {
+            "location": "/CONDUCT/#contributor-code-of-conduct", 
+            "text": "", 
+            "title": "Contributor Code of Conduct"
+        }, 
+        {
+            "location": "/CONDUCT/#our-pledge", 
+            "text": "In the interest of fostering an open and welcoming environment, we as\ncontributors and maintainers pledge to making participation in our project and\nour community a harassment-free experience for everyone, regardless of age, body\nsize, disability, ethnicity, gender identity and expression, level of experience,\nnationality, personal appearance, race, religion, or sexual identity and\norientation.", 
+            "title": "Our Pledge"
+        }, 
+        {
+            "location": "/CONDUCT/#our-standards", 
+            "text": "Examples of behavior that contributes to creating a positive environment\ninclude:   Using welcoming and inclusive language  Being respectful of differing viewpoints and experiences  Gracefully accepting constructive criticism  Focusing on what is best for the community  Showing empathy towards other community members   Examples of unacceptable behavior by participants include:   The use of sexualized language or imagery and unwelcome sexual attention or\nadvances  Trolling, insulting/derogatory comments, and personal or political attacks  Public or private harassment  Publishing others' private information, such as a physical or electronic\n  address, without explicit permission  Other conduct which could reasonably be considered inappropriate in a\n  professional setting", 
+            "title": "Our Standards"
+        }, 
+        {
+            "location": "/CONDUCT/#our-responsibilities", 
+            "text": "Project maintainers are responsible for clarifying the standards of acceptable\nbehavior and are expected to take appropriate and fair corrective action in\nresponse to any instances of unacceptable behavior.  Project maintainers have the right and responsibility to remove, edit, or\nreject comments, commits, code, wiki edits, issues, and other contributions\nthat are not aligned to this Code of Conduct, or to ban temporarily or\npermanently any contributor for other behaviors that they deem inappropriate,\nthreatening, offensive, or harmful.", 
+            "title": "Our Responsibilities"
+        }, 
+        {
+            "location": "/CONDUCT/#scope", 
+            "text": "This Code of Conduct applies both within project spaces and in public spaces\nwhen an individual is representing the project or its community. Examples of\nrepresenting a project or community include using an official project e-mail\naddress, posting via an official social media account, or acting as an appointed\nrepresentative at an online or offline event. Representation of a project may be\nfurther defined and clarified by project maintainers.", 
+            "title": "Scope"
+        }, 
+        {
+            "location": "/CONDUCT/#enforcement", 
+            "text": "Instances of abusive, harassing, or otherwise unacceptable behavior may be\nreported by contacting the project team at  wij@polderknowledge.nl . All\ncomplaints will be reviewed and investigated and will result in a response that\nis deemed necessary and appropriate to the circumstances. The project team is\nobligated to maintain confidentiality with regard to the reporter of an incident.\nFurther details of specific enforcement policies may be posted separately.  Project maintainers who do not follow or enforce the Code of Conduct in good\nfaith may face temporary or permanent repercussions as determined by other\nmembers of the project's leadership.", 
+            "title": "Enforcement"
+        }, 
+        {
+            "location": "/CONDUCT/#attribution", 
+            "text": "This Code of Conduct is adapted from the  Contributor Covenant , version 1.4,\navailable at  http://contributor-covenant.org/version/1/4", 
+            "title": "Attribution"
+        }, 
+        {
+            "location": "/CONTRIBUTING/", 
+            "text": "Contributing\n\n\nContributions are \nwelcome\n and will be fully \ncredited\n.\n\n\nWe accept contributions via Pull Requests on \nGithub\n.\n\n\nPull Requests\n\n\n\n\n\n\nPSR-2 Coding Standard\n - Check the code style with \n$ composer check-style\n and fix it with \n$ composer fix-style\n.\n\n\n\n\n\n\nAdd tests!\n - Your patch won't be accepted if it doesn't have tests.\n\n\n\n\n\n\nDocument any change in behaviour\n - Make sure the \nREADME.md\n and any other relevant documentation are kept up-to-date.\n\n\n\n\n\n\nConsider our release cycle\n - We try to follow \nSemVer v2.0.0\n. Randomly breaking public APIs is not an option.\n\n\n\n\n\n\nCreate feature branches\n - Don't ask us to pull from your master branch.\n\n\n\n\n\n\nOne pull request per feature\n - If you want to do more than one thing, send multiple pull requests.\n\n\n\n\n\n\nSend coherent history\n - Make sure each individual commit in your pull request is meaningful. If you had to make multiple intermediate commits while developing, please \nsquash them\n before submitting.\n\n\n\n\n\n\nRunning Tests\n\n\n$ composer test\n\n\n\nHappy coding\n!", 
+            "title": "Contributing"
+        }, 
+        {
+            "location": "/CONTRIBUTING/#contributing", 
+            "text": "Contributions are  welcome  and will be fully  credited .  We accept contributions via Pull Requests on  Github .", 
+            "title": "Contributing"
+        }, 
+        {
+            "location": "/CONTRIBUTING/#pull-requests", 
+            "text": "PSR-2 Coding Standard  - Check the code style with  $ composer check-style  and fix it with  $ composer fix-style .    Add tests!  - Your patch won't be accepted if it doesn't have tests.    Document any change in behaviour  - Make sure the  README.md  and any other relevant documentation are kept up-to-date.    Consider our release cycle  - We try to follow  SemVer v2.0.0 . Randomly breaking public APIs is not an option.    Create feature branches  - Don't ask us to pull from your master branch.    One pull request per feature  - If you want to do more than one thing, send multiple pull requests.    Send coherent history  - Make sure each individual commit in your pull request is meaningful. If you had to make multiple intermediate commits while developing, please  squash them  before submitting.", 
+            "title": "Pull Requests"
+        }, 
+        {
+            "location": "/CONTRIBUTING/#running-tests", 
+            "text": "$ composer test  Happy coding !", 
+            "title": "Running Tests"
+        }, 
+        {
+            "location": "/LICENSE/", 
+            "text": "MIT License\n\n\nCopyright (c) 2017 Polder Knowledge\n\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.", 
+            "title": "Licence"
+        }
+    ]
+}

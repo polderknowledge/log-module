@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="./img/favicon.ico">
+
+    <title></title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.6.3/css/font-awesome.min.css" integrity="sha256-AIodEDkC8V/bHBkfyxzolUMw57jeQ9CauwhVW6YJ9CA=" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/styles-1513b055a7.css">
+
+    
+</head>
+
+<body class="homepage" >
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://polderknowledge.com" data-toggle="tooltip" data-placement="bottom" title="Polder Knowledge"><img src="./img/logo.svg" height="28" alt="Polder Knowledge" /></a>
+              <a href="">log-module</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="active">
+                        <a href=".">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="configuration/">Configuration</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="mvc-logging/">MVC Logging</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="service-manager/">Service Manager</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="CONDUCT/">Conduct</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="CONTRIBUTING/">Contributing</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="LICENSE/">Licence</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li>-->
+                    <!--<a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">-->
+                        <!--<i class="fa fa-book"></i> Components-->
+                    <!--</a>-->
+                <!--</li>-->
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/polderknowledge/log-module/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div id="page-top" class="container docs">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#log-module">log-module</a></li>
+        
+            <li><a href="#install">Install</a></li>
+        
+            <li><a href="#usage">Usage</a></li>
+        
+            <li><a href="#change-log">Change log</a></li>
+        
+            <li><a href="#testing">Testing</a></li>
+        
+            <li><a href="#contributing">Contributing</a></li>
+        
+            <li><a href="#security">Security</a></li>
+        
+            <li><a href="#community">Community</a></li>
+        
+            <li><a href="#credits">Credits</a></li>
+        
+            <li><a href="#license">License</a></li>
+        
+    
+    </ul>
+
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="">log-module</a> &raquo;</li>
+  
+    
+  
+  <li class="active">Home</li>
+</ol>
+
+<h1 id="log-module">log-module</h1>
+<p><a href="https://packagist.org/packages/polderknowledge/log-module"><img alt="Latest Version on Packagist" src="https://img.shields.io/packagist/v/polderknowledge/log-module.svg?style=flat-square" /></a>
+<a href="LICENSE/"><img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" /></a>
+<a href="https://travis-ci.org/polderknowledge/log-module"><img alt="Build Status" src="https://img.shields.io/travis/polderknowledge/log-module/master.svg?style=flat-square" /></a>
+<a href="https://scrutinizer-ci.com/g/polderknowledge/log-module/code-structure"><img alt="Coverage Status" src="https://img.shields.io/scrutinizer/coverage/g/polderknowledge/log-module.svg?style=flat-square" /></a>
+<a href="https://scrutinizer-ci.com/g/polderknowledge/log-module"><img alt="Quality Score" src="https://img.shields.io/scrutinizer/g/polderknowledge/log-module.svg?style=flat-square" /></a>
+<a href="https://packagist.org/packages/polderknowledge/log-module"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/polderknowledge/log-module.svg?style=flat-square" /></a></p>
+<p>The log module is a Zend Framework module that provides support for Monolog logger channels. This module also comes
+with a standard error logger enabled which is used to log PHP notices, warnings and errors in applications.</p>
+<h2 id="install">Install</h2>
+<p>Via Composer</p>
+<pre class="codehilite"><code class="language-bash">$ composer require polderknowledge/log-module</code></pre>
+
+<p>Next add the module to the module config (usually <code>config/modules.php</code> or <code>config/application.config.php</code>):</p>
+<pre class="codehilite"><code class="language-php">return [
+    'modules' =&gt; [
+        'PolderKnowledge\\LogModule',
+    ],
+];</code></pre>
+
+<h2 id="usage">Usage</h2>
+<p>This module has a predefined <code>ErrorLogger</code> logging channel configured. This channel is used to write PHP notices, 
+warnings and errors to. Since it depends on the application on how to handle these messages, there are no handlers 
+defined for this channel.</p>
+<h2 id="change-log">Change log</h2>
+<p>Please have a look at <a href="https://github.com/polderknowledge/log-module/releases">the releases section</a> for an overview of all changes.</p>
+<h2 id="testing">Testing</h2>
+<pre class="codehilite"><code class="language-bash">$ composer test</code></pre>
+
+<h2 id="contributing">Contributing</h2>
+<p>Please see <a href="CONTRIBUTING/">CONTRIBUTING</a> and <a href="CONDUCT/">CONDUCT</a> for details.</p>
+<h2 id="security">Security</h2>
+<p>If you discover any security related issues, please report them via <a href="https://hackerone.com/polderknowledge">HackerOne</a> 
+instead of using the issue tracker or e-mail.</p>
+<h2 id="community">Community</h2>
+<p>We have an IRC channel where you can find us every now and then. We're on the Freenode network in the
+channel #polderknowledge.</p>
+<h2 id="credits">Credits</h2>
+<ul>
+<li><a href="https://polderknowledge.com">Polder Knowledge</a></li>
+<li><a href="https://github.com/polderknowledge/log-module/contributors">All Contributors</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>Please see <a href="LICENSE/">LICENSE.md</a> for the license of this application.</p>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous disabled">
+      <a rel="prev" ><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next">
+      <a rel="next" href="configuration/">Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <div id="footerwrap">
+    <div class="container">
+        <div class="row site-map">
+            <div class="col-lg-3">
+              <p>
+                <strong>Polder Knowledge</strong><br />
+              </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 centered">
+                <a class="back-to-top" href="#page-top"><i class="fa fa-chevron-circle-up fa-4" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="spacing"></div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Copyright</h4>
+                <div class="hline-w"></div>
+
+                <p>Copyright &COPY; 2002-2017 <a href="https://www.polderknowledge.com/">Polder Knowledge</a></p>
+            </div>
+
+            <div class="col-lg-4">
+                <h4>Contacts</h4>
+                <div class="hline-w"></div>
+                <p>
+                    <a href="irc://irc.freenode.net/polderknowledge" class="btn-social btn-outline" alt="IRC" title="IRC"><i class="fa fa-comment"></i></a>
+                    <a href="https://github.com/polderknowledge" class="btn-social btn-outline" alt="Github" title="Github"><i class="fa fa-github"></i></a>
+                    <a href="https://twitter.com/polderknowledge" class="btn-social btn-outline" alt="Twitter" title="Twitter"><i class="fa fa-twitter"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="//cdn.jsdelivr.net/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo=" crossorigin="anonymous"></script>
+    <script>var base_url = '.';</script>
+    <script src="./js/scripts-8ff3cb2b23.js"></script>
+    <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
+        <script src="./search/require.js"></script>
+        <script src="./search/search.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://polderknowledge.com" data-toggle="tooltip" data-placement="bottom" title="Go to the Polder Knowledge homepage"><img src="./img/logo.svg" alt="Polder Knowledge" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+</body>
+
+</html>
+
+<!--
+MkDocs version : 0.17.5
+Build Date UTC : 2018-11-02 13:09:06
+-->
